@@ -1,0 +1,129 @@
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-2 text-sm text-slate-500 mb-1">
+                <a routerLink="/dashboard" class="hover:text-rose-600 transition-colors">หน้าหลัก</a>
+                <i class="pi pi-angle-right text-xs"></i>
+                <a routerLink="/manage-asset" class="hover:text-rose-600 transition-colors">คำขอปรับปรุงบัญชี</a>
+                <i class="pi pi-angle-right text-xs"></i>
+                <span class="text-rose-600 font-medium">ประวัติคำขอทั้งหมด</span>
+            </div>
+            <div>
+                <p class="text-2xl font-bold text-slate-800">ประวัติคำขอ (All History)</p>
+                <p class="text-sm text-slate-500">รายการคำขอปรับปรุงบัญชีครุภัณฑ์ทั้งหมดในปีงบประมาณปัจจุบัน</p>
+            </div>
+        </div>
+
+        <div class="flex gap-2">
+            <button pButton icon="pi pi-file-excel" label="Export Excel"
+                class="p-button-outlined p-button-success text-sm"></button>
+            <button pButton icon="pi pi-print" label="พิมพ์รายงาน"
+                class="p-button-outlined p-button-secondary text-sm"></button>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+
+        <p-table #dt1 [value]="requests()" [rows]="10" [paginator]="true"
+            [globalFilterFields]="['topic', 'id', 'department']" [loading]="loading()" [rowHover]="true"
+            currentPageReportTemplate="แสดง {first} ถึง {last} จากทั้งหมด {totalRecords} รายการ"
+            [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]">
+
+            <ng-template pTemplate="caption">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 py-2">
+
+                    <span class="relative w-full md:w-auto block"> <i
+                            class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10 text-sm"></i>
+
+                        <input pInputText type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+                            placeholder="ค้นหาเลขที่, รายการ..."
+                            class="w-full md:w-80 text-sm pl-10! pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500" />
+                    </span>
+
+                    <div class="flex items-center gap-2 w-full md:w-auto">
+                        <p-select [options]="statuses" [(ngModel)]="selectedStatus"
+                            (onChange)="dt1.filter($event.value, 'status', 'equals')" placeholder="สถานะทั้งหมด"
+                            styleClass="w-full md:w-48 text-sm" [showClear]="true">
+                        </p-select>
+
+                        <button pButton label="ล้างค่า" class="p-button-outlined p-button-secondary p-button-sm"
+                            icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr class="bg-slate-50 text-slate-600 text-sm uppercase tracking-wider border-b border-slate-200">
+                    <th style="width: 12%" pSortableColumn="id">เลขที่ <p-sortIcon field="id"></p-sortIcon></th>
+                    <th style="width: 12%" pSortableColumn="type">ประเภท <p-sortIcon field="type"></p-sortIcon></th>
+                    <th style="width: 28%" pSortableColumn="topic">รายการครุภัณฑ์ <p-sortIcon
+                            field="topic"></p-sortIcon></th>
+                    <th style="width: 12%" pSortableColumn="requestDate">วันที่ <p-sortIcon
+                            field="requestDate"></p-sortIcon></th>
+                    <th style="width: 12%" pSortableColumn="budget" class="text-right">งบประมาณ <p-sortIcon
+                            field="budget"></p-sortIcon></th>
+                    <th style="width: 12%" pSortableColumn="status" class="text-center">สถานะ <p-sortIcon
+                            field="status"></p-sortIcon></th>
+                    <th style="width: 12%" class="text-center">จัดการ</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-request>
+                <tr
+                    class="hover:bg-rose-50/30 transition-colors border-b border-slate-100 text-sm text-slate-700 cursor-pointer">
+
+                    <td class="font-mono font-medium text-slate-500">{{ request.id }}</td>
+
+                    <td>
+                        <p-tag [value]="getTypeLabel(request.type)" [severity]="getTypeSeverity(request.type)"
+                            [rounded]="true" styleClass="text-[10px] px-2"></p-tag>
+                    </td>
+
+                    <td>
+                        <div class="font-bold text-slate-800">{{ request.topic }}</div>
+                        <div class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                            <i class="pi pi-building text-[10px]"></i> {{ request.department }}
+                        </div>
+                    </td>
+
+                    <td>{{ request.requestDate | date:'dd/MM/yyyy' }}</td>
+
+                    <td class="text-right font-mono">
+                        {{ request.budget > 0 ? (request.budget | number:'1.2-2') : '-' }}
+                    </td>
+
+                    <td class="text-center">
+                        <p-tag [value]="getStatusLabel(request.status)"
+                            [severity]="getStatusSeverity(request.status)"></p-tag>
+                    </td>
+
+                    <td class="text-center">
+                        <div class="flex justify-center gap-2">
+                            <button pButton icon="pi pi-eye"
+                                class="p-button-rounded p-button-text p-button-secondary w-8 h-8"
+                                pTooltip="ดูรายละเอียด" tooltipPosition="top"></button>
+                            @if(request.status === 'draft' || request.status === 'rejected') {
+                            <button pButton icon="pi pi-pencil"
+                                class="p-button-rounded p-button-text p-button-info w-8 h-8" pTooltip="แก้ไข"
+                                tooltipPosition="top"></button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7" class="text-center p-12 text-slate-400">
+                        <div class="flex flex-col items-center justify-center">
+                            <i class="pi pi-inbox text-5xl mb-3 text-slate-300"></i>
+                            <span>ไม่พบข้อมูลคำขอ</span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+    </div>
+</div>

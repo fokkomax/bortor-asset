@@ -1,0 +1,100 @@
+<main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800">
+                สวัสดี, <span class="bg-clip-text text-transparent bg-linear-to-r from-rose-600 to-pink-500">{{
+                    authService.currentUser()?.name }}</span>
+            </h2>
+            <p class="text-sm text-slate-500 mt-1 flex items-center gap-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                ระบบเปิดใช้งาน: ปรับปรุงข้อมูลครุภัณฑ์ รอบที่ 1/2570
+            </p>
+        </div>
+        <div class="flex gap-3">
+            <button
+                class="px-4 py-2 bg-white border border-slate-200 text-slate-600 text-sm font-medium rounded-lg hover:border-rose-300 hover:text-rose-600 shadow-sm flex items-center gap-2 transition-colors">
+                <i class="pi pi-download"></i> คู่มือ
+            </button>
+            <button
+                class="px-4 py-2 bg-rose-600 text-white text-sm font-medium rounded-lg hover:bg-rose-700 shadow-lg shadow-rose-200 flex items-center gap-2 transition-transform active:scale-95">
+                <i class="pi pi-plus"></i> เพิ่มรายการด่วน
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div *ngFor="let stat of stats"
+            [ngClass]="stat.color === 'rose-gradient' ? 'bg-linear-to-br from-rose-500 to-pink-600 text-white shadow-lg shadow-rose-200' : 'bg-white border border-slate-100 shadow-sm hover:shadow-md'"
+            class="p-5 rounded-2xl transition-all group hover:-translate-y-1">
+
+            <div class="flex justify-between items-start">
+                <div *ngIf="stat.color !== 'rose-gradient'"
+                    [ngClass]="'bg-' + stat.color + '-50 text-' + stat.color + '-600 group-hover:bg-' + stat.color + '-600 group-hover:text-white'"
+                    class="p-2 rounded-lg transition-colors">
+                    <i [class]="stat.icon + ' text-xl'"></i>
+                </div>
+                <div *ngIf="stat.color === 'rose-gradient'" class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                    <i [class]="stat.icon + ' text-xl'"></i>
+                </div>
+
+                <span *ngIf="stat.change" class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">{{
+                    stat.change }}</span>
+                <span *ngIf="stat.badge"
+                    [ngClass]="stat.color === 'rose-gradient' ? 'text-white bg-white/20 border border-white/20' : 'text-slate-400 bg-slate-50'"
+                    class="text-xs font-bold px-2 py-1 rounded-full">{{ stat.badge }}</span>
+            </div>
+
+            <div class="mt-4">
+                <h3 class="text-3xl font-bold tracking-tight" [class.text-slate-800]="stat.color !== 'rose-gradient'">{{
+                    stat.count }}</h3>
+                <p class="text-sm font-medium" [class.text-slate-400]="stat.color !== 'rose-gradient'"
+                    [class.text-rose-100]="stat.color === 'rose-gradient'">{{ stat.subtext }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="font-bold text-slate-800">แนวโน้มการดำเนินการ</h3>
+                    <p class="text-xs text-slate-400 mt-1">เปรียบเทียบ แก้ไข vs นำเข้าใหม่ (รายเดือน)</p>
+                </div>
+                <select class="text-xs border border-slate-200 rounded-lg px-2 py-1 focus:outline-none">
+                    <option>6 เดือนล่าสุด</option>
+                    <option>ปีงบประมาณนี้</option>
+                </select>
+            </div>
+            <div class="h-64 w-full">
+                <canvas id="dashboardChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+            <h3 class="font-bold text-slate-800 mb-4">รายการล่าสุด</h3>
+            <div class="space-y-1">
+                <div
+                    class="group flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer border border-transparent hover:border-slate-100">
+                    <div
+                        class="w-10 h-10 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
+                        <i class="pi pi-pencil"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-slate-700 truncate group-hover:text-rose-600">เครื่องช่วยหายใจ
+                        </p>
+                        <p class="text-xs text-slate-400">แก้ไขสเปค • 2 ชม.</p>
+                    </div>
+                    <i class="pi pi-chevron-right text-xs text-slate-300"></i>
+                </div>
+            </div>
+
+            <button
+                class="w-full mt-4 py-2.5 text-xs font-bold text-slate-500 bg-slate-50 rounded-lg hover:bg-rose-50 hover:text-rose-600 transition-colors">
+                ดูประวัติทั้งหมด
+            </button>
+        </div>
+
+    </div>
+</main>

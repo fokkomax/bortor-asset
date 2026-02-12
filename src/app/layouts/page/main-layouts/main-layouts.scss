@@ -1,0 +1,24 @@
+/* Mega Menu Animation */
+.group:hover .mega-menu { 
+    display: block; 
+    animation: slideDown 0.2s ease-out forwards;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-link {
+    padding: 0.5rem 1rem;
+    color: #475569;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover, &.active {
+        background-color: #fff1f2;
+        color: #e11d48;
+    }
+}
