@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, RouterOutlet, RouterOutletContract } from '@angular/router';
 import { Auth } from '@/app/core/service/auth';
@@ -21,13 +21,16 @@ export class MainLayouts {
   configService = inject(AppConfig); // ดูแลเรื่องค่า Config กลาง (เช่น ปีงบประมาณ)
   layoutService = inject(Layouts); // Inject Layout Service
   private router = inject(Router);   // ใช้สำหรับสั่งเปลี่ยนหน้า (Navigate)
+  private cdRef = inject(ChangeDetectorRef);
 
   // --- UI State Variables (ตัวแปรคุมการแสดงผล) ---
-  isYearDropdownOpen = false;  // สถานะเปิด/ปิด Dropdown เลือกปี
-  isUserDropdownOpen = false;  // สถานะเปิด/ปิด Dropdown เมนูผู้ใช้
+  isYearDropdownOpen = signal<boolean>(false);
+  isUserDropdownOpen = signal<boolean>(false);
 
   // --- Toggle Functions (ฟังก์ชันสลับสถานะเปิด/ปิด) ---
-
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
+  }
   // สลับสถานะ Sidebar (ใช้กับปุ่ม Hamburger บน Mobile)
   toggleSidebar() {
     this.layoutService.toggleSidebar();
@@ -35,55 +38,54 @@ export class MainLayouts {
 
   // สลับเมนูเลือกปีงบประมาณ
   toggleYearDropdown() {
-    this.isYearDropdownOpen = !this.isYearDropdownOpen;
-    // Logic: ถ้าเปิดเมนูปี ให้ปิดเมนู User อัตโนมัติ (กันมันซ้อนกัน)
-    if (this.isYearDropdownOpen) this.isUserDropdownOpen = false;
+    // ✅ 3. ใช้ .update() เพื่อสลับค่า (true <-> false)
+    this.isYearDropdownOpen.update(v => !v);
+
+    // Logic: ถ้าเปิดเมนูปี ให้ปิดเมนู User
+    // ✅ 4. อ่านค่าต้องมี () และกำหนดค่าใช้ .set()
+    if (this.isYearDropdownOpen()) {
+      this.isUserDropdownOpen.set(false);
+    }
   }
 
   // สลับเมนูโปรไฟล์ผู้ใช้
   toggleUserDropdown() {
-    this.isUserDropdownOpen = !this.isUserDropdownOpen;
-    // Logic: ถ้าเปิดเมนู User ให้ปิดเมนูปี อัตโนมัติ
-    if (this.isUserDropdownOpen) this.isYearDropdownOpen = false;
+    this.isUserDropdownOpen.update(v => !v);
+
+    if (this.isUserDropdownOpen()) {
+      this.isYearDropdownOpen.set(false);
+    }
   }
 
   // --- Actions (ฟังก์ชันทำงานเมื่อผู้ใช้คลิกเมนู) ---
 
   // เมื่อเลือกปีงบประมาณ
   selectYear(year: number) {
-    this.configService.setBudgetYear(year); // ส่งค่าไปอัปเดตที่ Service กลาง
-    this.isYearDropdownOpen = false;        // เลือกเสร็จแล้วปิด Dropdown ทันที
+    this.configService.setBudgetYear(year);
+    this.isYearDropdownOpen.set(false); // ✅ ปิด Dropdown
   }
 
   // ไปหน้าแก้ไขข้อมูลส่วนตัว
   onEditProfile() {
     console.log('Go to Edit Profile');
-    this.isUserDropdownOpen = false;         // ปิดเมนูก่อนเปลี่ยนหน้า
-    this.router.navigate(['/settings/profile']); // สั่ง Router ให้เปลี่ยน URL
+    this.isUserDropdownOpen.set(false); // ✅ ปิด Dropdown
+    this.router.navigate(['/settings/profile']);
   }
 
   // ไปหน้าเปลี่ยนรหัสผ่าน
   onChangePassword() {
     console.log('Go to Change Password');
-    this.isUserDropdownOpen = false;
+    this.isUserDropdownOpen.set(false);
     this.router.navigate(['/settings/password']);
   }
 
   // ออกจากระบบ
   logout() {
-    this.isUserDropdownOpen = false;
-    this.authService.logout(); // เรียก Service ให้จัดการเคลียร์ User และดีดออก
+    this.isUserDropdownOpen.set(false);
+    this.authService.logout();
   }
 
   prepareRoute(outlet: RouterOutlet) {
-    // ✅ 1. ต้องเช็คก่อนว่า outlet ทำงานอยู่ไหม (isActivated)
-    // ถ้าไม่ Active ให้ return ค่าว่างไปเลย (เพื่อกัน Error NG04012)
-    if (!outlet.isActivated) {
-      return '';
-    }
-
-    // ✅ 2. ถ้า Active แล้ว ค่อยดึงข้อมูล
-    // จะดึงจาก data animation (ถ้ามี) หรือใช้ตัว route เองเป็นตัว trigger ก็ได้
-    return outlet.activatedRouteData?.['animation'] || outlet.activatedRoute;
+    return outlet && outlet.isActivated ? outlet.activatedRoute : '';
   }
 }

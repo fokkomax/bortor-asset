@@ -1,124 +1,216 @@
-<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 font-sans">
 
     <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
             <div class="flex items-center gap-2 text-sm text-slate-500 mb-1">
                 <a routerLink="/dashboard" class="hover:text-rose-600 transition-colors">หน้าหลัก</a>
                 <i class="pi pi-angle-right text-xs"></i>
-                <a routerLink="/manage-asset" class="hover:text-rose-600 transition-colors">คำขอปรับปรุงบัญชี</a>
-                <i class="pi pi-angle-right text-xs"></i>
-                <span class="text-rose-600 font-medium">ประวัติคำขอทั้งหมด</span>
+                <span class="text-rose-600 font-medium">ทะเบียนคุม</span>
             </div>
             <div>
-                <p class="text-2xl font-bold text-slate-800">ประวัติคำขอ (All History)</p>
-                <p class="text-sm text-slate-500">รายการคำขอปรับปรุงบัญชีครุภัณฑ์ทั้งหมดในปีงบประมาณปัจจุบัน</p>
+                <h2 class="text-2xl! font-bold text-slate-800 tracking-tight m-0!">ทะเบียนคุมคำขอ</h2>
+                <p class="text-sm text-slate-500">ตรวจสอบสถานะและติดตามผลการดำเนินการคำขอครุภัณฑ์</p>
             </div>
         </div>
 
         <div class="flex gap-2">
-            <button pButton icon="pi pi-file-excel" label="Export Excel"
-                class="p-button-outlined p-button-success text-sm"></button>
-            <button pButton icon="pi pi-print" label="พิมพ์รายงาน"
-                class="p-button-outlined p-button-secondary text-sm"></button>
+            <button pButton label="สร้างคำขอ / ทำรายการ" icon="pi pi-plus" (click)="showCreateDialog()"
+                class="bg-slate-800 border-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg shadow-sm text-sm">
+            </button>
+
+            <p-dialog header="เลือกประเภทรายการที่ต้องการทำ" [(visible)]="displayModal" [modal]="true"
+                [style]="{width: '90%', maxWidth: '800px'}" [draggable]="false" [resizable]="false"
+                [dismissableMask]="true">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-6">
+                    <div *ngFor="let option of menuOptions" (click)="onSelectMenu(option.route)"
+                        class="cursor-pointer border border-slate-200 rounded-xl p-6 text-center transition-all duration-200 group relative overflow-hidden hover:-translate-y-1 hover:shadow-lg"
+                        [ngClass]="{
+                            'hover:border-rose-300 hover:bg-rose-50/50': option.theme === 'rose',
+                            'hover:border-orange-300 hover:bg-orange-50/50': option.theme === 'orange',
+                            'hover:border-red-300 hover:bg-red-50/50': option.theme === 'red'
+                        }">
+                        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-transform group-hover:scale-110"
+                            [ngClass]="{
+                                'bg-rose-100 text-rose-600': option.theme === 'rose',
+                                'bg-orange-100 text-orange-600': option.theme === 'orange',
+                                'bg-red-100 text-red-600': option.theme === 'red'
+                            }">
+                            <i [class]="option.icon" class="text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-700 mb-2 text-lg! m-0!">{{ option.title }}</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">{{ option.description }}</p>
+                        <i class="pi pi-arrow-right absolute bottom-4 right-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0"
+                           [ngClass]="{
+                              'text-rose-400': option.theme === 'rose',
+                              'text-orange-400': option.theme === 'orange',
+                              'text-red-400': option.theme === 'red'
+                           }"></i>
+                    </div>
+                </div>
+            </p-dialog>
+
+            <button pButton icon="pi pi-file-excel" class="p-button-outlined p-button-secondary"></button>
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:border-blue-300 transition-colors">
+            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
+                <i class="pi pi-folder"></i>
+            </div>
+            <div>
+                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wide">รายการทั้งหมด</p>
+                <p class="text-xl font-bold text-slate-700">{{ requests().length }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:border-yellow-300 transition-colors">
+            <div class="w-12 h-12 rounded-full bg-yellow-50 text-yellow-600 flex items-center justify-center text-xl font-bold">
+                <i class="pi pi-clock"></i>
+            </div>
+            <div>
+                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wide">รออนุมัติ</p>
+                <p class="text-xl font-bold text-slate-700">3</p> </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:border-green-300 transition-colors">
+            <div class="w-12 h-12 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-xl font-bold">
+                <i class="pi pi-check-circle"></i>
+            </div>
+            <div>
+                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wide">อนุมัติแล้ว</p>
+                <p class="text-xl font-bold text-slate-700">12</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:border-red-300 transition-colors">
+            <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center text-xl font-bold">
+                <i class="pi pi-exclamation-circle"></i>
+            </div>
+            <div>
+                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wide">ต้องแก้ไข</p>
+                <p class="text-xl font-bold text-slate-700">1</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
         <p-table #dt1 [value]="requests()" [rows]="10" [paginator]="true"
             [globalFilterFields]="['topic', 'id', 'department']" [loading]="loading()" [rowHover]="true"
             currentPageReportTemplate="แสดง {first} ถึง {last} จากทั้งหมด {totalRecords} รายการ"
-            [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]">
+            [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-sm align-middle">
 
             <ng-template pTemplate="caption">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 py-2">
-
-                    <span class="relative w-full md:w-auto block"> <i
-                            class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10 text-sm"></i>
-
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 py-3 px-4 bg-slate-50/50 border-b border-slate-100">
+                    <span class="relative w-full md:w-auto block">
+                        <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10 text-sm"></i>
                         <input pInputText type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
-                            placeholder="ค้นหาเลขที่, รายการ..."
-                            class="w-full md:w-80 text-sm pl-10! pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500" />
+                            placeholder="ค้นหาเลขที่, ชื่อรายการ..."
+                            class="w-full md:w-72 text-sm pl-10! pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 bg-white" />
                     </span>
-
                     <div class="flex items-center gap-2 w-full md:w-auto">
                         <p-select [options]="statuses" [(ngModel)]="selectedStatus"
                             (onChange)="dt1.filter($event.value, 'status', 'equals')" placeholder="สถานะทั้งหมด"
-                            styleClass="w-full md:w-48 text-sm" [showClear]="true">
+                            styleClass="w-full md:w-48 text-sm border-slate-300" [showClear]="true">
                         </p-select>
-
-                        <button pButton label="ล้างค่า" class="p-button-outlined p-button-secondary p-button-sm"
-                            icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                        <button pButton
+                            class="p-button-outlined p-button-secondary p-button-sm w-9 h-9 flex items-center justify-center bg-white border-slate-300 text-slate-500"
+                            icon="pi pi-filter-slash" (click)="clear(dt1)" pTooltip="ล้างตัวกรอง"></button>
                     </div>
                 </div>
             </ng-template>
 
             <ng-template pTemplate="header">
-                <tr class="bg-slate-50 text-slate-600 text-sm uppercase tracking-wider border-b border-slate-200">
-                    <th style="width: 12%" pSortableColumn="id">เลขที่ <p-sortIcon field="id"></p-sortIcon></th>
-                    <th style="width: 12%" pSortableColumn="type">ประเภท <p-sortIcon field="type"></p-sortIcon></th>
-                    <th style="width: 28%" pSortableColumn="topic">รายการครุภัณฑ์ <p-sortIcon
-                            field="topic"></p-sortIcon></th>
-                    <th style="width: 12%" pSortableColumn="requestDate">วันที่ <p-sortIcon
-                            field="requestDate"></p-sortIcon></th>
-                    <th style="width: 12%" pSortableColumn="budget" class="text-right">งบประมาณ <p-sortIcon
-                            field="budget"></p-sortIcon></th>
-                    <th style="width: 12%" pSortableColumn="status" class="text-center">สถานะ <p-sortIcon
-                            field="status"></p-sortIcon></th>
-                    <th style="width: 12%" class="text-center">จัดการ</th>
+                <tr class="bg-slate-50 text-slate-600 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+                    <th style="width: 12%" pSortableColumn="id" class="py-3!">เลขที่ <p-sortIcon field="id"></p-sortIcon></th>
+                    <th style="width: 30%" pSortableColumn="topic" class="py-3!">รายการ / หน่วยงาน <p-sortIcon field="topic"></p-sortIcon></th>
+                    <th style="width: 12%" pSortableColumn="requestDate" class="py-3!">วันที่ส่ง <p-sortIcon field="requestDate"></p-sortIcon></th>
+                    <th style="width: 15%" pSortableColumn="budget" class="text-right py-3!">งบประมาณ <p-sortIcon field="budget"></p-sortIcon></th>
+                    <th style="width: 15%" pSortableColumn="status" class="text-center py-3!">สถานะ <p-sortIcon field="status"></p-sortIcon></th>
+                    <th style="width: 10%" class="text-center py-3!">Action</th>
                 </tr>
             </ng-template>
 
             <ng-template pTemplate="body" let-request>
-                <tr
-                    class="hover:bg-rose-50/30 transition-colors border-b border-slate-100 text-sm text-slate-700 cursor-pointer">
-
-                    <td class="font-mono font-medium text-slate-500">{{ request.id }}</td>
-
+                <tr class="hover:bg-rose-50/40 transition-colors border-b border-slate-50 text-sm text-slate-700 cursor-pointer group"
+                    [routerLink]="['/manage-asset/detail', request.id]">
+                    <td class="font-mono font-medium text-slate-500 group-hover:text-rose-600 transition-colors">{{ request.id }}</td>
                     <td>
-                        <p-tag [value]="getTypeLabel(request.type)" [severity]="getTypeSeverity(request.type)"
-                            [rounded]="true" styleClass="text-[10px] px-2"></p-tag>
-                    </td>
-
-                    <td>
-                        <div class="font-bold text-slate-800">{{ request.topic }}</div>
-                        <div class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                            <i class="pi pi-building text-[10px]"></i> {{ request.department }}
+                        <div class="font-bold text-slate-800 mb-1">{{ request.topic }}</div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-medium border" [ngClass]="{
+                                    'bg-blue-50 text-blue-600 border-blue-100': request.type === 'import',
+                                    'bg-orange-50 text-orange-600 border-orange-100': request.type === 'update',
+                                    'bg-red-50 text-red-600 border-red-100': request.type === 'dispose'
+                                }">
+                                {{ getTypeLabel(request.type) }}
+                            </span>
+                            <span class="text-xs text-slate-500 flex items-center gap-1">
+                                <i class="pi pi-building text-[10px]"></i> {{ request.department }}
+                            </span>
                         </div>
                     </td>
-
-                    <td>{{ request.requestDate | date:'dd/MM/yyyy' }}</td>
-
-                    <td class="text-right font-mono">
+                    <td class="text-slate-500">
+                        {{ request.requestDate | date:'dd/MM/yyyy' }}
+                        <div class="text-[10px] text-slate-400">10:30 น.</div>
+                    </td>
+                    <td class="text-right font-mono font-medium text-slate-700">
                         {{ request.budget > 0 ? (request.budget | number:'1.2-2') : '-' }}
                     </td>
-
                     <td class="text-center">
-                        <p-tag [value]="getStatusLabel(request.status)"
-                            [severity]="getStatusSeverity(request.status)"></p-tag>
+                        <span [ngClass]="{
+                            'bg-yellow-50 text-yellow-700 border-yellow-200': request.status === 'pending',
+                            'bg-green-50 text-green-700 border-green-200': request.status === 'approved',
+                            'bg-red-50 text-red-700 border-red-200': request.status === 'rejected',
+                            'bg-slate-100 text-slate-600 border-slate-200': request.status === 'draft'
+                        }"
+                            class="px-3 py-1 rounded-full text-xs font-bold flex items-center justify-center gap-1.5 w-fit mx-auto border border-opacity-50">
+                            <i class="pi text-[10px]" [ngClass]="{
+                                'pi-clock': request.status === 'pending',
+                                'pi-check-circle': request.status === 'approved',
+                                'pi-times-circle': request.status === 'rejected',
+                                'pi-file-edit': request.status === 'draft'
+                            }"></i>
+                            {{ getStatusLabel(request.status) }}
+                        </span>
                     </td>
-
                     <td class="text-center">
-                        <div class="flex justify-center gap-2">
+                        <div class="flex justify-center gap-1" (click)="$event.stopPropagation()">
                             <button pButton icon="pi pi-eye"
-                                class="p-button-rounded p-button-text p-button-secondary w-8 h-8"
-                                pTooltip="ดูรายละเอียด" tooltipPosition="top"></button>
+                                class="p-button-rounded p-button-text p-button-secondary w-8 h-8 hover:bg-slate-100 text-slate-400 hover:text-rose-600"
+                                [routerLink]="['/manage-asset/detail', request.id]" pTooltip="ดูรายละเอียด"></button>
                             @if(request.status === 'draft' || request.status === 'rejected') {
                             <button pButton icon="pi pi-pencil"
-                                class="p-button-rounded p-button-text p-button-info w-8 h-8" pTooltip="แก้ไข"
-                                tooltipPosition="top"></button>
+                                class="p-button-rounded p-button-text p-button-secondary w-8 h-8 hover:bg-orange-50 text-slate-400 hover:text-orange-500"
+                                pTooltip="แก้ไข"></button>
                             }
                         </div>
                     </td>
                 </tr>
             </ng-template>
 
+            <ng-template pTemplate="loadingbody">
+                <tr *ngFor="let i of [1,2,3,4,5]">
+                    <td><p-skeleton width="80%"></p-skeleton></td>
+                    <td><p-skeleton width="60%" styleClass="mb-2"></p-skeleton><p-skeleton width="40%"></p-skeleton></td>
+                    <td><p-skeleton width="80%"></p-skeleton></td>
+                    <td><p-skeleton width="80%"></p-skeleton></td>
+                    <td class="text-center"><p-skeleton width="60%" styleClass="mx-auto rounded-full"></p-skeleton></td>
+                    <td class="text-center"><p-skeleton shape="circle" size="2rem" styleClass="mx-auto"></p-skeleton></td>
+                </tr>
+            </ng-template>
+
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="7" class="text-center p-12 text-slate-400">
-                        <div class="flex flex-col items-center justify-center">
-                            <i class="pi pi-inbox text-5xl mb-3 text-slate-300"></i>
-                            <span>ไม่พบข้อมูลคำขอ</span>
+                    <td colspan="6" class="text-center p-12">
+                        <div class="flex flex-col items-center justify-center text-slate-300">
+                            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                                <i class="pi pi-inbox text-3xl text-slate-400"></i>
+                            </div>
+                            <span class="text-slate-500 font-medium">ไม่พบข้อมูลคำขอ</span>
+                            <span class="text-sm text-slate-400 mt-1">ลองปรับเปลี่ยนตัวกรอง หรือสร้างคำขอใหม่</span>
                         </div>
                     </td>
                 </tr>

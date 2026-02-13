@@ -1,0 +1,161 @@
+<div class="bg-slate-50 font-sans text-slate-600 antialiased min-h-screen flex flex-col">
+
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm z-20 sticky top-0">
+        <div class="flex items-center gap-3">
+            <a routerLink="/manage-asset/history"
+                class="w-8 h-8 bg-rose-100 rounded-lg flex items-center justify-center text-rose-600 hover:bg-rose-200 transition-colors cursor-pointer">
+                <i class="pi pi-arrow-left"></i>
+            </a>
+            <h2 class="text-lg! font-bold text-slate-700 m-0!">สร้างคำขอขึ้นทะเบียนครุภัณฑ์ใหม่</h2>
+        </div>
+        <div class="text-sm text-slate-400">แบบฟอร์ม: REQ-NEW-2570</div>
+    </header>
+
+    <main class="flex-1 max-w-4xl mx-auto w-full p-6">
+
+        <form [formGroup]="requestForm" (ngSubmit)="submitRequest()" class="space-y-6">
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-rose-50/50 px-6 py-4 border-b border-rose-100 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-sm">
+                        1
+                    </div>
+                    <h3 class="font-semibold text-rose-800 m-0!">ข้อมูลรายการและตรวจสอบความซ้ำซ้อน</h3>
+                </div>
+
+                <div class="p-6 space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">
+                            ชื่อรายการครุภัณฑ์ (ภาษาไทย) <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" formControlName="itemName" (input)="onNameChange($event)"
+                                class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-200 focus:border-rose-400 outline-none transition-shadow"
+                                placeholder="ระบุชื่อครุภัณฑ์...">
+
+                            <div *ngIf="isChecking()" class="absolute right-3 top-3">
+                                <span class="w-4 h-4 border-2 border-rose-500 border-t-transparent rounded-full animate-spin block"></span>
+                            </div>
+                        </div>
+                        <p *ngIf="isChecking()" class="text-xs text-rose-500 mt-1 animate-pulse">
+                            กำลังตรวจสอบความซ้ำซ้อนกับฐานข้อมูล...</p>
+                    </div>
+
+                    <div *ngIf="showSimilarity()"
+                        class="similarity-box bg-orange-50 border border-orange-200 rounded-lg p-4 animate-fade-in-down">
+                        <div class="flex items-start gap-3">
+                            <i class="pi pi-exclamation-triangle text-orange-500 text-xl mt-0.5"></i>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-bold text-orange-800 mb-2">
+                                    พบรายการที่คล้ายกันในระบบ (กรุณาตรวจสอบ)
+                                </h4>
+
+                                <div class="space-y-2 bg-white rounded border border-orange-100 p-3 mb-3">
+                                    <div class="flex items-center justify-between text-sm pb-2 border-b border-slate-50">
+                                        <span class="text-slate-600">เครื่องช่วยหายใจชนิดควบคุมปริมาตรและความดัน</span>
+                                        <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">เหมือน 95%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-sm">
+                                        <span class="text-slate-600">เครื่องช่วยหายใจ (Ventilator) ชนิดเคลื่อนย้ายได้</span>
+                                        <span class="bg-orange-100 text-orange-600 text-xs font-bold px-2 py-0.5 rounded-full">เหมือน 80%</span>
+                                    </div>
+                                </div>
+
+                                <div (click)="toggleConfirmDuplicate()"
+                                    class="flex items-start gap-3 p-3 bg-orange-100/50 rounded border border-orange-200 cursor-pointer hover:bg-orange-100 transition-colors">
+                                    <div class="flex items-center h-5">
+                                        <input type="checkbox" [checked]="isDuplicateConfirmed()"
+                                            class="w-4 h-4 text-rose-600 border-gray-300 rounded focus:ring-rose-500 cursor-pointer">
+                                    </div>
+                                    <label class="text-sm text-slate-700 font-medium cursor-pointer select-none">
+                                        ข้าพเจ้าได้ตรวจสอบแล้ว และยืนยันว่ารายการที่ขอเพิ่มนี้ <span class="text-red-600 underline">เป็นรายการใหม่</span> ไม่ซ้ำกับรายการที่ระบบแนะนำ
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">ราคาต่อหน่วย (บาท) <span class="text-red-500">*</span></label>
+                            <input type="number" formControlName="price"
+                                class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-200 focus:border-rose-400 outline-none"
+                                placeholder="0.00">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">ประเภทครุภัณฑ์</label>
+                            <select formControlName="assetType"
+                                class="w-full px-4 py-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-rose-200 focus:border-rose-400 outline-none text-slate-600">
+                                <option>ครุภัณฑ์การแพทย์</option>
+                                <option>ครุภัณฑ์คอมพิวเตอร์</option>
+                                <option>ครุภัณฑ์สำนักงาน</option>
+                                <option>สิ่งก่อสร้าง</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Service Plan (สาขาหลัก) <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select formControlName="servicePlan"
+                                    class="w-full px-4 py-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-rose-200 focus:border-rose-400 outline-none appearance-none text-slate-600">
+                                    <option value="" disabled selected>-- เลือกสาขา --</option>
+                                    <option value="1">สาขาโรคหัวใจ (Heart)</option>
+                                    <option value="2">สาขามะเร็ง (Cancer)</option>
+                                    <option value="3">สาขาอุบัติเหตุและฉุกเฉิน (Trauma)</option>
+                                    <option value="4">สาขาทารกแรกเกิด (Newborn)</option>
+                                </select>
+                                <i class="pi pi-chevron-down absolute right-3 top-3.5 text-slate-400 pointer-events-none text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm">
+                        2
+                    </div>
+                    <h3 class="font-semibold text-slate-700 m-0!">เอกสารประกอบการพิจารณา</h3>
+                </div>
+                
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="border-2 border-dashed border-slate-300 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-50 hover:border-rose-300 transition-colors cursor-pointer group relative">
+                        <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+
+                        <div class="w-12 h-12 bg-rose-50 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i class="pi pi-file-pdf text-rose-500 text-xl"></i>
+                        </div>
+                        <h4 class="font-medium text-slate-700 text-sm">รายละเอียดคุณลักษณะ (Spec)</h4>
+                        <p class="text-xs text-slate-400 mt-1 mb-3">PDF, JPG ขนาดไม่เกิน 5MB</p>
+                        <span class="text-xs bg-white border border-slate-300 px-3 py-1.5 rounded shadow-sm text-slate-600 group-hover:border-rose-400 group-hover:text-rose-600">เลือกไฟล์</span>
+                    </div>
+
+                    <div class="border-2 border-dashed border-slate-300 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-50 hover:border-rose-300 transition-colors cursor-pointer group relative">
+                        <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+
+                        <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                        </div>
+                        <h4 class="font-medium text-slate-700 text-sm">ใบเสนอราคา (Quotation)</h4>
+                        <p class="text-xs text-slate-400 mt-1 mb-3">อย่างน้อย 1 รายการ</p>
+                        <span class="text-xs bg-white border border-slate-300 px-3 py-1.5 rounded shadow-sm text-slate-600 group-hover:border-blue-400 group-hover:text-blue-600">เลือกไฟล์</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-4 pt-4 pb-10">
+                <button type="button" routerLink="/manage-asset/history"
+                    class="px-6 py-2.5 text-slate-500 hover:bg-slate-100 rounded-lg text-sm font-medium transition-colors">ยกเลิก</button>
+                <button type="button" (click)="saveDraft()"
+                    class="px-6 py-2.5 border border-rose-200 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg text-sm font-medium transition-colors">บันทึกร่าง (Draft)</button>
+                <button type="submit"
+                    class="px-6 py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-sm font-medium shadow-lg shadow-rose-200 flex items-center gap-2 transition-all transform active:scale-95">
+                    <i class="pi pi-send text-xs"></i> ส่งคำขอตรวจสอบ
+                </button>
+            </div>
+
+        </form>
+    </main>
+</div>

@@ -1,0 +1,165 @@
+<div class="bg-slate-50 font-sans text-slate-600 antialiased min-h-screen flex flex-col">
+
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm z-20 sticky top-0">
+        <div class="flex items-center gap-3">
+            <a routerLink="/manage-asset/history"
+                class="w-8 h-8 bg-rose-100 rounded-lg flex items-center justify-center text-rose-600 hover:bg-rose-200 transition-colors cursor-pointer">
+                <i class="pi pi-arrow-left"></i>
+            </a>
+            <div>
+                <h2 class="text-lg! font-bold text-slate-700 leading-tight m-0!">สร้างคำขอ "ถอดถอน" รายการมาตรฐาน</h2>
+                <p class="text-[10px] text-slate-400">Deprecation Request: REQ-RM-2570</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-4xl mx-auto w-full p-6">
+
+        <form [formGroup]="disposeForm" (ngSubmit)="submitRequest()" class="space-y-6">
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-amber-50 px-6 py-4 border-b border-amber-100 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-sm">
+                        1
+                    </div>
+                    <h3 class="font-semibold text-amber-800">รายการที่ต้องการถอดถอนออกจากบัญชี</h3>
+                </div>
+
+                <div class="p-6">
+                    <div *ngIf="!targetAsset()" class="relative">
+                        <i class="pi pi-search absolute left-3 top-3 text-slate-400"></i>
+                        <input type="text" formControlName="searchTarget"
+                            class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-200 outline-none"
+                            placeholder="ค้นหารหัส หรือชื่อรายการมาตรฐาน...">
+                        <button type="button" (click)="mockSelectTarget()"
+                            class="absolute right-2 top-1.5 px-3 py-1 bg-amber-500 text-white rounded text-sm hover:bg-amber-600">
+                            ค้นหา
+                        </button>
+                    </div>
+
+                    <div *ngIf="targetAsset()" class="animate-fade-in">
+                        <div class="mb-4">
+                            <label class="block text-xs font-medium text-slate-400 mb-1">รหัสรายการมาตรฐาน (Standard ID)</label>
+                            <div class="relative group cursor-not-allowed">
+                                <input type="text" [value]="targetAsset().id + ' : ' + targetAsset().name"
+                                    class="w-full pl-4 pr-10 py-2.5 border border-slate-200 bg-slate-100 text-slate-600 font-medium rounded-lg focus:outline-none pointer-events-none"
+                                    readonly>
+                                <i class="pi pi-lock absolute right-3 top-3 text-slate-400"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-6 text-sm border-t border-slate-50 pt-4 mt-2">
+                            <div>
+                                <span class="block text-[10px] text-slate-400 uppercase tracking-wider mb-1">สถานะปัจจุบัน</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5 animate-pulse"></span> 
+                                    {{ targetAsset().status }}
+                                </span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] text-slate-400 uppercase tracking-wider mb-1">ประกาศใช้เมื่อ</span>
+                                <span class="font-medium text-slate-700">{{ targetAsset().year }}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] text-slate-400 uppercase tracking-wider mb-1">จำนวนการใช้งาน (อ้างอิง)</span>
+                                <span class="font-mono font-bold text-slate-700">{{ targetAsset().usageCount | number }} รายการ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm">
+                        2
+                    </div>
+                    <h3 class="font-semibold text-slate-700">เหตุผลความจำเป็นและแผนรองรับ</h3>
+                </div>
+
+                <div class="p-6 space-y-6">
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">เหตุผลในการถอดถอน <span class="text-red-500">*</span></label>
+                        <p-select [options]="reasonOptions" formControlName="reason" 
+                            optionLabel="label"
+                            optionValue="value" 
+                            placeholder="-- เลือกเหตุผล --" 
+                            styleClass="w-full border-slate-300"
+                            [showClear]="true">
+                        </p-select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">คำอธิบายเพิ่มเติม</label>
+                        <textarea formControlName="description" rows="3"
+                            class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none transition-shadow"
+                            placeholder="เช่น ยกเลิกเนื่องจากมีสารปรอทเป็นอันตราย ตามประกาศกระทรวงฯ ลงวันที่..."></textarea>
+                    </div>
+
+                    <div class="p-4 bg-amber-50/50 border border-amber-100 rounded-lg transition-all duration-300"
+                        [ngClass]="{'bg-slate-50 border-slate-200': !disposeForm.get('hasReplacement')?.value}">
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <p-checkbox formControlName="hasReplacement" [binary]="true" inputId="replace"></p-checkbox>
+                            <label for="replace" class="text-sm font-bold text-slate-700 cursor-pointer select-none">
+                                มีรายการทดแทน (Replacement Item)
+                            </label>
+                        </div>
+
+                        <div *ngIf="disposeForm.get('hasReplacement')?.value"
+                            class="pl-8 border-l-2 border-amber-200 ml-2 animate-fade-in-down">
+                            <p class="text-xs text-slate-500 mb-2">เมื่อหน่วยงานพยายามเลือกรายการเดิม ระบบจะแนะนำให้ใช้รายการนี้แทน:</p>
+
+                            <span class="p-fluid">
+                                <p-autoComplete formControlName="replacementItem" 
+                                    [suggestions]="filteredReplacements"
+                                    (completeMethod)="filterReplacement($event)" 
+                                    field="name"
+                                    placeholder="ค้นหารายการทดแทน (พิมพ์ชื่อ หรือรหัส...)" 
+                                    [dropdown]="true"
+                                    styleClass="w-full text-sm">
+                                    
+                                    <ng-template let-item pTemplate="item">
+                                        <div class="flex flex-col">
+                                            <span class="font-medium text-slate-700">{{item.name}}</span>
+                                            <span class="text-xs text-slate-400">{{item.code}}</span>
+                                        </div>
+                                    </ng-template>
+
+                                </p-autoComplete>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">มีผลตั้งแต่</label>
+                            <p-select [options]="effectiveOptions" formControlName="effectiveDate" 
+                                optionLabel="label"
+                                optionValue="value" 
+                                styleClass="w-full border-slate-300">
+                            </p-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-4 pt-4 pb-10">
+                <button type="button" routerLink="/manage-asset/history"
+                    class="px-6 py-2.5 text-slate-500 hover:bg-slate-100 rounded-lg text-sm font-medium transition-colors">
+                    ยกเลิก
+                </button>
+                <button type="button"
+                    class="px-6 py-2.5 border border-rose-200 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg text-sm font-medium transition-colors">
+                    บันทึกร่าง
+                </button>
+                <button type="submit"
+                    class="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium shadow-lg shadow-amber-200 flex items-center gap-2 transition-all transform active:scale-95">
+                    <i class="pi pi-ban text-xs"></i> ยืนยันถอดถอนรายการ
+                </button>
+            </div>
+
+        </form>
+    </main>
+</div>
