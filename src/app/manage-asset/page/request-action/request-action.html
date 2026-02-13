@@ -1,13 +1,93 @@
-<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8">
-        <h1 class="text-2xl! font-bold text-slate-800 m-0!">สวัสดี, คุณสมชาย 👋</h1>
-        <p class="text-slate-500">เลือกประเภทรายการที่ต้องการดำเนินการ หรือตรวจสอบสถานะล่าสุด</p>
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 font-sans">
+
+    <div
+        class="mb-8 rounded-xl bg-orange-50 border border-orange-100 p-4 flex items-start gap-4 shadow-sm relative overflow-hidden animate-fade-in-down">
+        <div class="absolute top-0 left-0 w-1.5 h-full bg-orange-500"></div>
+
+        <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+            <i class="pi pi-megaphone text-lg"></i>
+        </div>
+
+        <div class="flex-1 pt-0.5">
+            <h4 class="font-bold text-orange-800 text-sm mb-1 flex items-center gap-2">
+                แจ้งเตือนปิดปรับปรุงระบบ
+                <span class="bg-orange-200 text-orange-800 text-[10px] px-2 py-0.5 rounded-full">Maintenance</span>
+            </h4>
+            <p class="text-sm text-orange-700/80 leading-relaxed">
+                ระบบจะทำการปิดปรับปรุงเพื่ออัปเกรดเวอร์ชันใหม่ ในวันที่ <span class="font-bold text-orange-800">20 ก.พ.
+                    2569</span>
+                เวลา <span class="font-bold text-orange-800">18:00 - 20:00 น.</span> ขออภัยในความไม่สะดวก
+            </p>
+        </div>
+
+        <button class="text-orange-400 hover:text-orange-600 transition-colors p-1">
+            <i class="pi pi-times"></i>
+        </button>
     </div>
 
-    <app-menu-action></app-menu-action>
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-2xl! font-bold text-slate-800 m-0!">สวัสดี, {{ authService.currentUser()?.name }} 👋</h1>
+            <p class="text-slate-500 mt-1">ภาพรวมการดำเนินงานและจัดการคำขอของคุณ</p>
+        </div>
 
-    
+        <div class="flex gap-4">
+            <div class="px-4 py-2 bg-white rounded-lg border border-slate-200 shadow-sm flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                    <i class="pi pi-folder"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">รายการทั้งหมด</p>
+                    <p class="font-bold text-slate-700 text-lg leading-tight">25</p>
+                </div>
+            </div>
 
-    <app-history-action></app-history-action>
+            <div class="px-4 py-2 bg-white rounded-lg border border-slate-200 shadow-sm flex items-center gap-3">
+                <div
+                    class="w-8 h-8 rounded-full bg-yellow-50 text-yellow-600 flex items-center justify-center shrink-0">
+                    <i class="pi pi-clock"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">รออนุมัติ</p>
+                    <p class="font-bold text-slate-700 text-lg leading-tight">3</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <app-menu-action class="mb-10 block"></app-menu-action>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <div class="lg:col-span-2 space-y-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg! font-bold text-slate-700 m-0 flex items-center gap-2">
+                    <i class="pi pi-history text-rose-500"></i> รายการล่าสุด
+                </h3>
+                <a routerLink="/manage-asset/history"
+                    class="text-sm text-rose-600 hover:underline cursor-pointer">ดูทั้งหมด</a>
+            </div>
+            <app-history-action></app-history-action>
+        </div>
+
+        <div class="lg:col-span-1 space-y-6">
+            <h3 class="text-lg! font-bold text-slate-700 m-0 flex items-center gap-2">
+                <i class="pi pi-chart-pie text-rose-500"></i> สรุปสถานะ
+            </h3>
+
+            <div
+                class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm min-h-80 flex flex-col items-center justify-center relative">
+                <p-chart type="doughnut" [data]="data" [options]="options" class="w-full"></p-chart>
+
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none mt-4">
+                    <div class="text-center">
+                        <span class="block text-3xl font-bold text-slate-700">16</span>
+                        <span class="text-xs text-slate-400">รายการ</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </div>

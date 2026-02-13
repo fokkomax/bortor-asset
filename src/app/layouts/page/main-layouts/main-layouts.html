@@ -37,10 +37,10 @@
 
                 <div class="hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 items-center gap-1 z-50">
 
-                    <a routerLink="/dashboard" routerLinkActive="bg-rose-50 text-rose-600 ring-1 ring-rose-100"
+                    <a routerLink="/" routerLinkActive="bg-rose-50 text-rose-600 ring-1 ring-rose-100"
                         class="px-4 py-2.5 rounded-xl text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-rose-600 transition-all flex items-center gap-2 group">
                         <i class="pi pi-home text-lg text-slate-400 group-hover:text-rose-500 transition-colors"></i>
-                        <span>Dashboard</span>
+                        <span>หน้าแรก</span>
                     </a>
 
                     <div class="group h-20 flex items-center">
@@ -62,8 +62,6 @@
                                             ดำเนินการ
                                         </div>
                                         <ul class="space-y-3 text-base text-slate-600">
-                                            <li><a routerLink="/manage-asset" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white hover:shadow-sm hover:text-blue-600 transition-all">
-                                                <i class="pi pi-plus-circle text-slate-400 hover:text-blue-500"></i> สร้างคำขอใหม่</a></li>
                                             
                                             <li><a routerLink="/manage-asset/history" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white hover:shadow-sm hover:text-blue-600 transition-all">
                                                 <i class="pi pi-list text-slate-400 hover:text-blue-500"></i> ทะเบียนคุมคำขอ</a></li>
@@ -212,8 +210,8 @@
             </button>
         </div>
         <div class="p-4 space-y-1">
-            <a routerLink="/dashboard" (click)="toggleSidebar()" routerLinkActive="bg-rose-50 text-rose-600" class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-colors">
-                <i class="pi pi-home text-lg"></i> Dashboard
+            <a routerLink="/" (click)="toggleSidebar()" routerLinkActive="bg-rose-50 text-rose-600" class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-colors">
+                <i class="pi pi-home text-lg"></i> หน้าแรก
             </a>
             
             <div class="py-2"><div class="h-px bg-slate-100 mx-2"></div><p class="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider mt-2">เมนูครุภัณฑ์</p></div>
