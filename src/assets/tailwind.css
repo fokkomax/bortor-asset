@@ -13,7 +13,13 @@
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
   --breakpoint-2xl: 1920px;
+  /* 👉 เพิ่มบรรทัดนี้: สร้าง class "font-chakra" */
+  --font-chakra: "Chakra Petch", sans-serif;
+
+  /* 👉 เพิ่มบรรทัดนี้ (ถ้าต้องการ): เปลี่ยน default "font-sans" ให้เป็น Chakra Petch */
+  --font-sans: "Chakra Petch", "Google Sans", sans-serif;
 }
+
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -30,5 +36,16 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
+  }
+
+  /* ✅ 2. บังคับใช้ Font กับทั้งเว็บ (และ PrimeNG) */
+  html,
+  body {
+    font-family: "Chakra Petch", sans-serif;
+  }
+
+  /* ✅ 3. แก้เผ็ด PrimeNG (ถ้ามันดื้อ) */
+  :root {
+    --font-family: "Chakra Petch", sans-serif;
   }
 }
