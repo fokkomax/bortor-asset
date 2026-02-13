@@ -1,0 +1,104 @@
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 font-sans">
+    @if (detail(); as data) {
+    <header
+        class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-10 shrink-0">
+        <div class="flex items-center gap-4">
+            <a routerLink="/expert/dashboard"
+                class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600"><i
+                    class="pi pi-arrow-left"></i></a>
+            <div>
+                <h1 class="text-lg! font-bold text-slate-800 m-0!">{{ data.title }}</h1>
+                <p class="text-xs text-slate-400">{{ data.reqId }} • เพิ่มรายการใหม่</p>
+            </div>
+        </div>
+        <div class="flex items-center text-xs">
+            <div
+                class="flex items-center text-purple-700 font-bold bg-purple-50 px-3 py-1 rounded-full border border-purple-100">
+                <div class="w-2 h-2 rounded-full bg-purple-600 mr-2 animate-pulse"></div><span>ผู้เชี่ยวชาญ</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-6 pb-24">
+        <div class="max-w-4xl mx-auto space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                <h3 class="font-bold text-lg! text-slate-700 border-l-4 border-purple-500 pl-3 mb-4 m-0!">ข้อมูลจำเพาะ</h3>
+                <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
+                    @for (spec of data.specs; track spec.label) {
+                    <div class="border-b border-slate-50 pb-2">
+                        <span class="block text-xs text-slate-400 mb-1">{{ spec.label }}</span>
+                        <span class="font-medium text-slate-800">{{ spec.value }}</span>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-50 px-5 py-3 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-700 text-sm! m-0!">AI Similarity Check</h3>
+                    <span class="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded font-bold">Pass</span>
+                </div>
+                <div class="p-5 flex items-center gap-4">
+                    <div class="w-16 h-16 rounded-full border-4 border-slate-100 flex items-center justify-center">
+                        <span class="text-xl! font-bold text-green-600">{{ data.similarityScore }}%</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm text-slate-600">พบความเหมือนสูงสุดเพียง <b class="text-green-600">{{
+                                data.similarityScore }}%</b></p>
+                        <p class="text-xs text-slate-400 mt-1">ยืนยันแล้วว่าเป็นรายการใหม่</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md border border-purple-200 overflow-hidden ring-4 ring-purple-50">
+                <div
+                    class="bg-linear-to-r from-purple-600 to-purple-500 px-5 py-3 border-b border-purple-700 text-white">
+                    <h3 class="font-bold text-sm! flex items-center gap-2 m-0!"><i class="pi pi-verified"></i>
+                        ส่วนลงความเห็นผู้เชี่ยวชาญ</h3>
+                </div>
+                <div class="p-6">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">ความเห็นทางเทคนิค <span
+                            class="text-red-500">*</span></label>
+                    <textarea [ngModel]="comment()" (ngModelChange)="comment.set($event)" rows="4"
+                        class="w-full p-4 border border-slate-300 rounded-lg outline-none text-sm transition-all shadow-inner focus:ring-2 focus:ring-purple-200"></textarea>
+
+                    <label class="block text-sm font-bold text-slate-700 mt-4 mb-3">ผลการพิจารณา <span
+                            class="text-red-500">*</span></label>
+                    <div class="space-y-3">
+                        <label
+                            class="flex items-center p-3 border border-slate-200 bg-white rounded-lg cursor-pointer hover:border-purple-400 transition-all group"
+                            [class.border-purple-500]="decision() === 'approve'">
+                            <input type="radio" name="d" value="approve" [ngModel]="decision()"
+                                (ngModelChange)="decision.set($event)" class="w-4 h-4 text-purple-600">
+                            <div class="ml-3">
+                                <span class="block text-sm font-bold text-slate-700">อนุมัติ / เห็นชอบ</span>
+                            </div>
+                        </label>
+                        <label
+                            class="flex items-center p-3 border border-slate-200 bg-white rounded-lg cursor-pointer hover:border-orange-400 transition-all group"
+                            [class.border-orange-500]="decision() === 'return'">
+                            <input type="radio" name="d" value="return" [ngModel]="decision()"
+                                (ngModelChange)="decision.set($event)" class="w-4 h-4 text-orange-600">
+                            <div class="ml-3">
+                                <span class="block text-sm font-bold text-slate-700">ตีกลับแก้ไข</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer
+        class="h-20 bg-white border-t border-slate-200 px-8 flex items-center justify-end shadow-lg z-30 shrink-0 gap-3">
+        <button routerLink="/expert/dashboard"
+            class="px-6 py-2.5 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50">ยกเลิก</button>
+        <button (click)="onSubmit()" [disabled]="isSubmitting()"
+            class="px-8 py-2.5 bg-purple-600 text-white rounded-lg text-sm font-bold shadow-lg shadow-purple-200 hover:bg-purple-700 flex items-center gap-2 disabled:opacity-50">
+            <i class="pi" [class.pi-send]="!isSubmitting()" [class.pi-spin]="isSubmitting()"
+                [class.pi-spinner]="isSubmitting()"></i>
+            {{ isSubmitting() ? 'กำลังบันทึก...' : 'บันทึกผลการพิจารณา' }}
+        </button>
+    </footer>
+    }
+</div>

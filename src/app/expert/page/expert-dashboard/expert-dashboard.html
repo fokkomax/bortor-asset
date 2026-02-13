@@ -1,0 +1,148 @@
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 font-sans">
+
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="h-1 w-full bg-linear-to-r from-purple-500 to-indigo-400"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center font-bold shadow-sm">
+                    <i class="pi pi-user-edit text-xl"></i>
+                </div>
+                <div>
+                    <div class="font-bold text-lg! text-slate-800 leading-tight m-0!">Expert <span
+                            class="text-purple-600">Console</span></div>
+                    <div class="text-xs text-slate-500 m-0!">ระบบพิจารณาสำหรับผู้เชี่ยวชาญ</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <div class="text-sm font-bold text-slate-700 m-0!">นพ.สมชาย</div>
+                    <div class="text-xs text-slate-400 m-0!">แผนกเครื่องมือแพทย์</div>
+                </div>
+                <div
+                    class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm flex items-center justify-center">
+                    <i class="pi pi-user text-slate-500"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div
+                class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 group hover:border-purple-300 transition-colors">
+                <div
+                    class="w-14 h-14 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-2xl shadow-sm">
+                    <i class="pi pi-clock"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500 font-medium m-0!">งานรอตรวจ</p>
+                    <p class="text-3xl! font-bold text-slate-800 m-0!">{{ expertService.stats().pending }}</p>
+                </div>
+            </div>
+            <div
+                class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 group hover:border-purple-300 transition-colors">
+                <div
+                    class="w-14 h-14 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-2xl shadow-sm">
+                    <i class="pi pi-check-circle"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500 font-medium m-0!">ตรวจแล้ววันนี้</p>
+                    <p class="text-3xl! font-bold text-slate-800 m-0!">{{ expertService.stats().doneToday }}</p>
+                </div>
+            </div>
+            <div
+                class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 group hover:border-purple-300 transition-colors">
+                <div
+                    class="w-14 h-14 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl shadow-sm">
+                    <i class="pi pi-chart-line"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500 font-medium m-0!">รวมทั้งหมด</p>
+                    <p class="text-3xl! font-bold text-slate-800 m-0!">{{ expertService.stats().total }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+            <h2 class="text-xl! font-bold text-slate-800 flex items-center gap-2 m-0!"><i
+                    class="pi pi-list text-purple-500"></i> รายการงานของคุณ</h2>
+            <div class="relative w-full sm:w-64">
+                <i class="pi pi-search absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
+                    placeholder="ค้นหา..."
+                    class="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm w-full focus:ring-2 focus:ring-purple-200 outline-none">
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="flex border-b border-slate-100">
+                <button (click)="activeTab.set('pending')" [class.border-purple-600]="activeTab() === 'pending'"
+                    [class.text-purple-600]="activeTab() === 'pending'"
+                    class="px-6 py-4 text-sm font-bold border-b-2 border-transparent hover:bg-slate-50 transition-colors">
+                    งานที่ต้องทำ
+                </button>
+                <button (click)="activeTab.set('done')" [class.border-purple-600]="activeTab() === 'done'"
+                    [class.text-purple-600]="activeTab() === 'done'"
+                    class="px-6 py-4 text-sm font-bold border-b-2 border-transparent hover:bg-slate-50 transition-colors">
+                    ประวัติการตรวจ
+                </button>
+            </div>
+
+            <div class="divide-y divide-slate-100">
+                @if (expertService.isLoading()) {
+                <div class="p-8 text-center text-slate-400">กำลังโหลดข้อมูล...</div>
+                } @else if (filteredTasks().length === 0) {
+                <div class="p-8 text-center text-slate-400">ไม่พบรายการ</div>
+                } @else {
+                @for (task of filteredTasks(); track task.id) {
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-slate-50 transition-colors cursor-pointer group"
+                    [routerLink]="getLink(task.type, task.id)">
+
+                    <div class="col-span-1">
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase border"
+                            [ngClass]="{
+                                    'bg-green-100 text-green-700 border-green-200': task.type === 'new',
+                                    'bg-orange-100 text-orange-700 border-orange-200': task.type === 'edit',
+                                    'bg-red-100 text-red-700 border-red-200': task.type === 'dispose'
+                                }">
+                            <i class="pi"
+                                [ngClass]="{'pi-plus': task.type==='new', 'pi-pencil': task.type==='edit', 'pi-trash': task.type==='dispose'}"></i>
+                            {{ task.type === 'new' ? 'เพิ่มใหม่' : (task.type === 'edit' ? 'แก้ไข' : 'ถอดถอน') }}
+                        </span>
+                    </div>
+                    <div class="col-span-5">
+                        <h4 class="font-bold text-slate-800 text-sm! group-hover:text-purple-600 transition-colors m-0!">
+                            {{ task.title }}
+                        </h4>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs text-slate-500"><i class="pi pi-building text-[10px]"></i> {{
+                                task.requester }}</span>
+                            <span class="text-slate-300">•</span>
+                            <span class="text-xs text-slate-400 font-mono">{{ task.reqId }}</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2 text-sm text-slate-500">{{ task.submitDate }}</div>
+                    <div class="col-span-2 flex justify-center">
+                        @if (task.status === 'pending') {
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold border"
+                            [ngClass]="task.isUrgent ? 'bg-red-50 text-red-600 border-red-200 animate-pulse' : 'bg-slate-100 text-slate-500 border-slate-200'">
+                            {{ task.sla }}
+                        </span>
+                        } @else {
+                        <span class="text-green-600 font-bold text-xs flex items-center gap-1"><i
+                                class="pi pi-check"></i> ตรวจแล้ว</span>
+                        }
+                    </div>
+                    <div class="col-span-2 text-right">
+                        <button
+                            class="bg-purple-600 text-white text-sm px-4 py-2 rounded-lg font-bold shadow-sm hover:bg-purple-700">พิจารณา</button>
+                    </div>
+                </div>
+                }
+                }
+            </div>
+        </div>
+    </main>
+</div>
