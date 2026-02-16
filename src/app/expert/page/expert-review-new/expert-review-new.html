@@ -1,104 +1,228 @@
-<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 font-sans">
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 font-sans">
+
     @if (detail(); as data) {
     <header
-        class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-10 shrink-0">
-        <div class="flex items-center gap-4">
+        class="min-h-20 bg-white border-b border-slate-200 border-t-4 border-t-purple-500 flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-8 py-4 sm:py-0 shadow-sm z-20 sticky top-0 rounded-t-lg gap-4">
+        <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
             <a routerLink="/expert/dashboard"
-                class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600"><i
-                    class="pi pi-arrow-left"></i></a>
-            <div>
-                <h1 class="text-lg! font-bold text-slate-800 m-0!">{{ data.title }}</h1>
-                <p class="text-xs text-slate-400">{{ data.reqId }} • เพิ่มรายการใหม่</p>
+                class="w-10 h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-purple-600 hover:bg-purple-100 hover:text-purple-700 transition-all cursor-pointer shadow-sm shrink-0">
+                <i class="pi pi-arrow-left"></i>
+            </a>
+            <div class="min-w-0 flex-1">
+                <h1 class="text-lg! sm:text-xl! font-bold text-slate-800 leading-tight m-0! truncate">
+                    {{ data.title }}
+                </h1>
+                <div class="flex flex-wrap items-center gap-2 mt-1">
+                    <span class="text-xs text-slate-500">รหัส: <span class="font-mono font-bold text-purple-600">{{
+                            data.reqId }}</span></span>
+                    <span class="hidden sm:inline text-slate-300">•</span>
+                    <span
+                        class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded text-[10px] font-bold whitespace-nowrap">เพิ่มใหม่</span>
+                </div>
             </div>
         </div>
-        <div class="flex items-center text-xs">
+
+        <div class="flex items-center justify-between w-full sm:w-auto gap-3 pl-14 sm:pl-0">
+            <div class="text-left sm:text-right">
+                <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Status</span>
+                <span class="text-xs font-bold text-slate-600">รอการพิจารณา (Pending)</span>
+            </div>
             <div
-                class="flex items-center text-purple-700 font-bold bg-purple-50 px-3 py-1 rounded-full border border-purple-100">
-                <div class="w-2 h-2 rounded-full bg-purple-600 mr-2 animate-pulse"></div><span>ผู้เชี่ยวชาญ</span>
+                class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center border-2 border-white shadow-sm shrink-0">
+                <i class="pi pi-user text-purple-600"></i>
             </div>
         </div>
     </header>
 
-    <div class="flex-1 overflow-y-auto p-6 pb-24">
-        <div class="max-w-4xl mx-auto space-y-6">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-                <h3 class="font-bold text-lg! text-slate-700 border-l-4 border-purple-500 pl-3 mb-4 m-0!">ข้อมูลจำเพาะ</h3>
-                <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
-                    @for (spec of data.specs; track spec.label) {
-                    <div class="border-b border-slate-50 pb-2">
-                        <span class="block text-xs text-slate-400 mb-1">{{ spec.label }}</span>
-                        <span class="font-medium text-slate-800">{{ spec.value }}</span>
+    <div class="flex-1 max-w-5xl mx-auto w-full p-0 sm:p-6 mt-4 sm:mt-0">
+        <div class="space-y-4 sm:space-y-6">
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 flex items-center gap-2">
+                    <div
+                        class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border border-slate-200 text-slate-500 flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm shrink-0">
+                        1
                     </div>
-                    }
+                    <h3 class="font-semibold text-slate-700 m-0! text-sm! sm:text-base!">รายละเอียดข้อมูลจำเพาะ
+                        (Specification)</h3>
+                </div>
+
+                <div class="p-4 sm:p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 sm:gap-y-6 gap-x-12">
+                        @for (spec of data.specs; track spec.label) {
+                        <div class="border-b border-slate-50 pb-2 group hover:border-purple-100 transition-colors">
+                            <span
+                                class="block text-xs font-medium text-slate-400 mb-1 group-hover:text-purple-500 transition-colors">
+                                {{ spec.label }}
+                            </span>
+                            <span class="font-medium text-slate-800 text-sm wrap-break-word">{{ spec.value }}</span>
+                        </div>
+                        }
+                    </div>
                 </div>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="bg-slate-50 px-5 py-3 border-b border-slate-100 flex justify-between items-center">
-                    <h3 class="font-bold text-slate-700 text-sm! m-0!">AI Similarity Check</h3>
-                    <span class="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded font-bold">Pass</span>
-                </div>
-                <div class="p-5 flex items-center gap-4">
-                    <div class="w-16 h-16 rounded-full border-4 border-slate-100 flex items-center justify-center">
-                        <span class="text-xl! font-bold text-green-600">{{ data.similarityScore }}%</span>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-sm text-slate-600">พบความเหมือนสูงสุดเพียง <b class="text-green-600">{{
-                                data.similarityScore }}%</b></p>
-                        <p class="text-xs text-slate-400 mt-1">ยืนยันแล้วว่าเป็นรายการใหม่</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-md border border-purple-200 overflow-hidden ring-4 ring-purple-50">
                 <div
-                    class="bg-linear-to-r from-purple-600 to-purple-500 px-5 py-3 border-b border-purple-700 text-white">
-                    <h3 class="font-bold text-sm! flex items-center gap-2 m-0!"><i class="pi pi-verified"></i>
-                        ส่วนลงความเห็นผู้เชี่ยวชาญ</h3>
+                    class="bg-slate-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-sparkles text-purple-500"></i>
+                        <h3 class="font-semibold text-slate-700 m-0! text-sm! sm:text-base!">ผลการตรวจสอบความซ้ำซ้อน (AI
+                            Check)</h3>
+                    </div>
+                    <span
+                        class="bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wide border border-green-200">
+                        <i class="pi pi-check-circle mr-1"></i> Pass
+                    </span>
                 </div>
-                <div class="p-6">
-                    <label class="block text-sm font-bold text-slate-700 mb-2">ความเห็นทางเทคนิค <span
-                            class="text-red-500">*</span></label>
-                    <textarea [ngModel]="comment()" (ngModelChange)="comment.set($event)" rows="4"
-                        class="w-full p-4 border border-slate-300 rounded-lg outline-none text-sm transition-all shadow-inner focus:ring-2 focus:ring-purple-200"></textarea>
 
-                    <label class="block text-sm font-bold text-slate-700 mt-4 mb-3">ผลการพิจารณา <span
-                            class="text-red-500">*</span></label>
-                    <div class="space-y-3">
-                        <label
-                            class="flex items-center p-3 border border-slate-200 bg-white rounded-lg cursor-pointer hover:border-purple-400 transition-all group"
-                            [class.border-purple-500]="decision() === 'approve'">
-                            <input type="radio" name="d" value="approve" [ngModel]="decision()"
-                                (ngModelChange)="decision.set($event)" class="w-4 h-4 text-purple-600">
-                            <div class="ml-3">
-                                <span class="block text-sm font-bold text-slate-700">อนุมัติ / เห็นชอบ</span>
-                            </div>
-                        </label>
-                        <label
-                            class="flex items-center p-3 border border-slate-200 bg-white rounded-lg cursor-pointer hover:border-orange-400 transition-all group"
-                            [class.border-orange-500]="decision() === 'return'">
-                            <input type="radio" name="d" value="return" [ngModel]="decision()"
-                                (ngModelChange)="decision.set($event)" class="w-4 h-4 text-orange-600">
-                            <div class="ml-3">
-                                <span class="block text-sm font-bold text-slate-700">ตีกลับแก้ไข</span>
-                            </div>
-                        </label>
+                <div class="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+                    <div class="relative w-20 h-20 flex items-center justify-center shrink-0">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                            <path class="text-slate-100"
+                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none" stroke="currentColor" stroke-width="3" />
+                            <path class="text-green-500 drop-shadow-sm"
+                                [attr.stroke-dasharray]="data.similarityScore + ', 100'"
+                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-lg font-bold text-slate-700">{{ data.similarityScore }}%</span>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 text-center sm:text-left">
+                        <h4 class="font-bold text-slate-800 text-sm! mb-1">ไม่พบรายการซ้ำซ้อนที่มีนัยสำคัญ</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            ระบบ AI ตรวจสอบฐานข้อมูลรายการมาตรฐานแล้ว พบความคล้ายคลึงสูงสุดเพียง {{ data.similarityScore }}%
+                            ซึ่งต่ำกว่าเกณฑ์ที่กำหนด (80%) ถือว่าเป็น <span
+                                class="font-bold text-green-600">รายการใหม่</span>
+                        </p>
                     </div>
                 </div>
             </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 flex items-center gap-2">
+                    <div
+                        class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border border-slate-200 text-slate-500 flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm shrink-0">
+                        2
+                    </div>
+                    <h3 class="font-semibold text-slate-700 m-0! text-sm! sm:text-base!">เหตุผลความจำเป็น</h3>
+                </div>
+                <div class="p-4 sm:p-6 space-y-4">
+                    <div class="bg-slate-50/50 p-4 rounded-lg border border-slate-100">
+                        <span
+                            class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">วัตถุประสงค์หลัก</span>
+                        <p class="text-sm font-medium text-slate-800">{{ data.reasonType ||
+                            'เพื่อทดแทนรายการเดิมที่ชำรุด' }}</p>
+                    </div>
+                    <div>
+                        <span
+                            class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">รายละเอียดเพิ่มเติม</span>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            {{ data.reasonDetail || 'มีความจำเป็นต้องจัดหาเครื่องมือแพทย์ชุดใหม่ เพื่อรองรับผู้ป่วยที่มีจำนวนเพิ่มมากขึ้นในแผนกฉุกเฉิน และเครื่องเดิมมีอายุการใช้งานเกิน 10 ปี ไม่สามารถซ่อมแซมได้คุ้มค่า' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white rounded-xl shadow-md border border-purple-200 overflow-hidden ring-4 ring-purple-50/50">
+                <div class="bg-purple-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-purple-100 flex items-center gap-2">
+                    <div
+                        class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm ring-2 ring-white">
+                        3
+                    </div>
+                    <h3 class="font-semibold text-purple-900 m-0! text-sm! sm:text-base!">ความเห็นและผลการพิจารณา</h3>
+                </div>
+
+                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">
+                            ความเห็นทางเทคนิค (Technical Opinion) <span class="text-red-500">*</span>
+                        </label>
+                        <textarea [ngModel]="comment()" (ngModelChange)="comment.set($event)" rows="4"
+                            class="w-full p-3 sm:p-4 border border-slate-300 rounded-lg outline-none text-sm transition-all focus:ring-2 focus:ring-purple-200 focus:border-purple-400 shadow-sm"
+                            placeholder="ระบุความเห็น ข้อสังเกต หรือข้อเสนอแนะเพิ่มเติม..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mt-2 mb-3">ผลการพิจารณา (Decision) <span
+                                class="text-red-500">*</span></label>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+                            <label
+                                class="relative flex flex-col p-4 border-2 border-slate-200 bg-white rounded-xl cursor-pointer hover:border-green-500 transition-all group items-center justify-center gap-2 h-full"
+                                [ngClass]="decision() === 'approve' ? 'border-green-500 bg-green-50/30 ring-1 ring-green-500' : 'border-slate-200 bg-white hover:border-green-300'">
+                                <input type="radio" name="d" value="approve" [ngModel]="decision()"
+                                    (ngModelChange)="decision.set($event)" class="peer sr-only">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-1">
+                                    <i class="pi pi-check text-lg"></i>
+                                </div>
+                                <span
+                                    class="font-bold text-slate-700 group-hover:text-green-700 text-sm text-center">อนุมัติ
+                                    / เห็นชอบ</span>
+                                <div
+                                    class="absolute inset-0 border-2 border-green-500 rounded-xl opacity-0 peer-checked:opacity-100 pointer-events-none">
+                                </div>
+                            </label>
+
+                            <label
+                                class="relative flex flex-col p-4 border-2 border-slate-200 bg-white rounded-xl cursor-pointer hover:border-orange-400 transition-all group items-center justify-center gap-2 h-full"
+                                [ngClass]="decision() === 'return' ? 'border-orange-500 bg-orange-50/30 ring-1 ring-orange-500' : 'border-slate-200 bg-white hover:border-orange-300'">
+                                <input type="radio" name="d" value="return" [ngModel]="decision()"
+                                    (ngModelChange)="decision.set($event)" class="peer sr-only">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mb-1">
+                                    <i class="pi pi-replay text-lg"></i>
+                                </div>
+                                <span
+                                    class="font-bold text-slate-700 group-hover:text-orange-700 text-sm text-center">ขอข้อมูลเพิ่มเติม</span>
+                                <div
+                                    class="absolute inset-0 border-2 border-orange-500 rounded-xl opacity-0 peer-checked:opacity-100 pointer-events-none">
+                                </div>
+                            </label>
+
+                            <label
+                                class="relative flex flex-col p-4 border-2 border-slate-200 bg-white rounded-xl cursor-pointer hover:border-red-400 transition-all group items-center justify-center gap-2 h-full"
+                                [ngClass]="decision() === 'reject' ? 'border-red-500 bg-red-50/30 ring-1 ring-red-500' : 'border-slate-200 bg-white hover:border-red-300'">
+                                <input type="radio" name="d" value="reject" [ngModel]="decision()"
+                                    (ngModelChange)="decision.set($event)" class="peer sr-only">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mb-1">
+                                    <i class="pi pi-ban text-lg"></i>
+                                </div>
+                                <span
+                                    class="font-bold text-slate-700 group-hover:text-red-700 text-sm text-center">ไม่อนุมัติ</span>
+                                <div
+                                    class="absolute inset-0 border-2 border-red-500 rounded-xl opacity-0 peer-checked:opacity-100 pointer-events-none">
+                                </div>
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col-reverse sm:flex-row items-center justify-end gap-3 sm:gap-4 pt-4 pb-10">
+                <button routerLink="/expert/dashboard"
+                    class="w-full sm:w-auto px-6 py-3 sm:py-2.5 text-slate-500 hover:bg-slate-100 rounded-lg text-sm font-medium transition-colors border border-transparent hover:border-slate-200">
+                    ยกเลิก
+                </button>
+
+                <button (click)="onSubmit()" [disabled]="isSubmitting()"
+                    class="w-full sm:w-auto px-6 py-3 sm:py-2.5 bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg text-sm font-medium shadow-lg shadow-purple-200 flex items-center justify-center gap-2 transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="pi" [class.pi-check-circle]="!isSubmitting()" [class.pi-spin]="isSubmitting()"
+                        [class.pi-spinner]="isSubmitting()"></i>
+                    {{ isSubmitting() ? 'กำลังบันทึก...' : 'ยืนยันผลการพิจารณา' }}
+                </button>
+            </div>
+
         </div>
     </div>
-
-    <footer
-        class="h-20 bg-white border-t border-slate-200 px-8 flex items-center justify-end shadow-lg z-30 shrink-0 gap-3">
-        <button routerLink="/expert/dashboard"
-            class="px-6 py-2.5 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50">ยกเลิก</button>
-        <button (click)="onSubmit()" [disabled]="isSubmitting()"
-            class="px-8 py-2.5 bg-purple-600 text-white rounded-lg text-sm font-bold shadow-lg shadow-purple-200 hover:bg-purple-700 flex items-center gap-2 disabled:opacity-50">
-            <i class="pi" [class.pi-send]="!isSubmitting()" [class.pi-spin]="isSubmitting()"
-                [class.pi-spinner]="isSubmitting()"></i>
-            {{ isSubmitting() ? 'กำลังบันทึก...' : 'บันทึกผลการพิจารณา' }}
-        </button>
-    </footer>
     }
 </div>

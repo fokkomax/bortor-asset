@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 // PrimeNG
@@ -20,12 +20,16 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     SelectModule,
     CheckboxModule,
     AutoCompleteModule,
-    RouterLink
+    RouterLink,
+    FormsModule
   ],
   templateUrl: './dispose-request.html',
   styleUrl: './dispose-request.scss',
 })
 export class DisposeRequest {
+
+  selectedSuggestion: any;
+  filteredAssets: any[] = [];
 
   disposeForm: FormGroup;
 
@@ -52,6 +56,13 @@ export class DisposeRequest {
   effectiveOptions = [
     { label: 'ทันที (Immediately)', value: 'now' },
     { label: 'ปีงบประมาณหน้า (2571)', value: 'next_fiscal' }
+  ];
+
+  // Mock Data
+  allAssets = [
+    { id: '1001-001-0001', name: 'เครื่องคอมพิวเตอร์ประมวลผล (PC)', category: 'คอมพิวเตอร์', status: 'Active' },
+    { id: '2005-002-0099', name: 'รถพยาบาลฉุกเฉิน (Ambulance)', category: 'ยานพาหนะ', status: 'Active' },
+    { id: '3001-001-0005', name: 'เครื่องวัดความดันโลหิต', category: 'การแพทย์', status: 'Inactive' }
   ];
 
   constructor(private fb: FormBuilder, private router: Router) {
@@ -105,6 +116,33 @@ export class DisposeRequest {
 
     console.log('🗑️ Submitting Dispose Request:', payload);
     this.router.navigate(['/manage-asset/history']);
+  }
+
+  // ฟังก์ชันค้นหา (Autocomplete)
+  searchAsset(event: any) {
+    const query = event.query.toLowerCase();
+    // จำลองการค้นหา
+    this.filteredAssets = this.allAssets.filter(item =>
+      item.name.toLowerCase().includes(query) ||
+      item.id.includes(query)
+    );
+  }
+
+  // เมื่อเลือกรายการจาก Dropdown
+  selectAsset(event: any) {
+    this.targetAsset.set({
+      id: event.value.id,
+      name: event.value.name,
+      status: event.value.status,
+      year: '2565',
+      usageCount: 154
+    });
+  }
+
+  // ปุ่มเปลี่ยนรายการ
+  clearTarget() {
+    this.targetAsset.set(null);
+    this.selectedSuggestion = null;
   }
 
 }

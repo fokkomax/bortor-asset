@@ -29,6 +29,7 @@ export class NewRequest {
       price: [null, Validators.required],
       assetType: ['ครุภัณฑ์การแพทย์'],
       servicePlan: ['', Validators.required],
+      reason: ['', Validators.required],
       filesSpec: [null],
       filesQuotation: [null]
     });
@@ -77,5 +78,5 @@ export class NewRequest {
       alert('กรุณากรอกข้อมูลให้ครบถ้วน');
     }
   }
-  
+
 }

@@ -9,14 +9,16 @@
         </div>
 
         <div class="flex-1 pt-0.5">
-            <h4 class="font-bold text-orange-800 text-sm mb-1 flex items-center gap-2">
-                แจ้งเตือนปิดปรับปรุงระบบ
-                <span class="bg-orange-200 text-orange-800 text-[10px] px-2 py-0.5 rounded-full">Maintenance</span>
+            <h4 class="font-bold! text-orange-800! text-sm! mb-1 flex flex-wrap items-center gap-2">
+                <span>แจ้งปิดการขอปรับปรุงบัญชีครุภัณฑ์</span>
+                <span class="bg-orange-200 text-orange-800 text-[10px] px-2 py-0.5 rounded-full whitespace-nowrap">
+                    Announcement
+                </span>
             </h4>
-            <p class="text-sm text-orange-700/80 leading-relaxed">
-                ระบบจะทำการปิดปรับปรุงเพื่ออัปเกรดเวอร์ชันใหม่ ในวันที่ <span class="font-bold text-orange-800">20 ก.พ.
-                    2569</span>
-                เวลา <span class="font-bold text-orange-800">18:00 - 20:00 น.</span> ขออภัยในความไม่สะดวก
+            <p class="text-sm text-orange-700/80 leading-relaxed wrap-break-word">
+                ระบบจะทำการขอปรับปรุงบัญชีครุภัณฑ์ ในวันที่ <span class="font-bold text-orange-800 whitespace-nowrap">20
+                    ก.พ. 2569</span>
+                เวลา <span class="font-bold text-orange-800 whitespace-nowrap">16.30 น.</span>
             </p>
         </div>
 
@@ -28,7 +30,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
             <h1 class="text-2xl! font-bold text-slate-800 m-0!">สวัสดี, {{ authService.currentUser()?.name }} 👋</h1>
-            <p class="text-slate-500 mt-1">ภาพรวมการดำเนินงานและจัดการคำขอของคุณ</p>
+            <p class="text-slate-500 mt-1">ภาพรวมการดำเนินงานและจัดการคำขอปรับปรุงบัญชีครุภัณฑ์ของคุณ</p>
         </div>
 
         <div class="flex gap-4">

@@ -41,28 +41,25 @@ export class RequestHistoryList {
   // 2. ข้อมูลเมนู (Config) - แก้ไขตรงนี้ที่เดียว จบ!
   menuOptions = [
     {
-      id: 'new',
-      title: 'ลงทะเบียนใหม่',
-      description: 'สำหรับครุภัณฑ์ที่เพิ่งได้รับมาใหม่ และยังไม่มีในระบบ',
-      icon: 'pi pi-plus',
-      route: '/manage-asset/new',
-      theme: 'rose' // สีธีม: ชมพู
+      title: '1. ตัดออกจากบัญชี',
+      description: 'สำหรับตัดรายการที่ซ้ำซ้อน หรือสิ้นสุดการใช้งาน',
+      icon: 'pi pi-trash', // หรือ pi-minus-circle
+      theme: 'orange', // ✅ สีส้ม
+      route: '/manage-asset/dispose'
     },
     {
-      id: 'edit',
-      title: 'ขอแก้ไขรายการ',
-      description: 'แก้ไขข้อมูลเดิมที่ผิดพลาด หรือปรับปรุงข้อมูลให้เป็นปัจจุบัน',
-      icon: 'pi pi-file-edit',
-      route: '/manage-asset/edit',
-      theme: 'orange' // สีธีม: ส้ม
+      title: '2. ปรับปรุงรายการเดิม',
+      description: 'แก้ไขรายละเอียด, ชื่อรายการ, หรือราคา',
+      icon: 'pi pi-file-edit', // หรือ pi-pencil
+      theme: 'blue', // ✅ สีฟ้า
+      route: '/manage-asset/edit'
     },
     {
-      id: 'dispose',
-      title: 'ขอจำหน่าย',
-      description: 'แจ้งจำหน่ายครุภัณฑ์ที่ชำรุด เสื่อมสภาพ หรือสูญหาย',
-      icon: 'pi pi-trash',
-      route: '/manage-asset/dispose',
-      theme: 'red' // สีธีม: แดง
+      title: '3. นำเข้าครุภัณฑ์ใหม่',
+      description: 'สำหรับนำเข้ารายการใหม่ที่ยังไม่มีในระบบ',
+      icon: 'pi pi-box', // หรือ pi-plus
+      theme: 'emerald', // ✅ สีเขียว
+      route: '/manage-asset/new'
     }
   ];
 

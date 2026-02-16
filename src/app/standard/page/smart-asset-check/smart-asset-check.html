@@ -5,11 +5,11 @@
             class="w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
             <i class="pi pi-search-plus text-3xl"></i>
         </div>
-        <h1 class="text-3xl! font-bold text-slate-800 mb-2 m-0!">ตรวจสอบบัญชีมาตรฐาน</h1>
+        <h1 class="text-3xl! font-bold text-slate-800 mb-2 m-0!">ตรวจสอบบัญชีครุภัณฑ์</h1>
         <p class="text-slate-500 mb-8 m-0!">พิมพ์ชื่อครุภัณฑ์ที่คุณต้องการขอ
-            ระบบจะช่วยตรวจสอบว่ามีในบัญชีมาตรฐานแล้วหรือยัง</p>
+            ระบบจะช่วยตรวจสอบว่ามีในบัญชีรายการแล้วหรือยัง</p>
 
-        <div class="relative group">
+        <div class="relative group mt-3">
             <input type="text" [ngModel]="query()" (ngModelChange)="query.set($event)" (keydown.enter)="onSearch()"
                 class="w-full pl-6 pr-14 py-4 text-lg border-2 border-slate-200 rounded-2xl shadow-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-100 outline-none transition-all"
                 placeholder="เช่น เครื่องวัดความดัน, รถพยาบาล...">

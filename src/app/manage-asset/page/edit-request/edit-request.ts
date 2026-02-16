@@ -23,9 +23,8 @@ export class EditRequest {
   selectedAsset = signal<any>(null); // เก็บข้อมูลเดิม (Before)
 
   reasonOptions = [
-    { label: 'บันทึกข้อมูลผิดพลาด (Human Error)', value: 'error' },
-    { label: 'ปรับปรุงข้อมูลตามจริง (Update Specification)', value: 'update' },
-    { label: 'โอนย้าย/เปลี่ยนหน่วยงาน', value: 'transfer' },
+    { label: 'ราคาเกินซื้อไม่ได้แล้ว', value: 'error' },
+    { label: 'ปรับปรุงชื่อให้เป็นปัจจุบัน', value: 'update' },
     { label: 'อื่นๆ', value: 'other' }
   ];
 
