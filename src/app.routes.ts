@@ -57,8 +57,34 @@ export const appRoutes: Routes = [
                         loadComponent: () => import('@/app/expert/page/expert-review-edit/expert-review-edit')
                             .then(m => m.ExpertReviewEdit)
                     },
+                    {
+                        path: 'review-dispose/:id',
+                        loadComponent: () => import('@/app/expert/page/expert-review-dispose/expert-review-dispose')
+                            .then(m => m.ExpertReviewDispose)
+                    },
                 ]
-            }
+            },
+            {
+                path: 'standard',
+                children: [
+                    {
+                        path: 'check',
+                        loadComponent: () => import('@/app/standard/page/smart-asset-check/smart-asset-check')
+                            .then(m => m.SmartAssetCheck)
+                    },
+                    {
+                        path: 'detail/:id',
+                        loadComponent: () => import('@/app/standard/page/standard-asset-detail/standard-asset-detail')
+
+                            .then(m => m.StandardAssetDetail)
+                    }
+                ]
+            },
+            {
+                path: 'summary',
+                loadComponent: () => import('@/app/report/page/summary-report/summary-report')
+                    .then(m => m.SummaryReport)
+            },
         ]
     },
     // { path: 'landing', component: Landing },

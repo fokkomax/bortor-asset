@@ -44,6 +44,13 @@ export interface RequestDetail {
   // เฉพาะรายการแก้ไข
   comparisons?: ComparisonItem[];
   editReason?: string;
+  // ✅ เฉพาะรายการจำหน่าย (Dispose)
+  disposeReason?: string;      // เหตุผลการจำหน่าย
+  assetCode?: string;          // รหัสครุภัณฑ์
+  purchaseDate?: string;       // วันที่ซื้อ (อายุการใช้งาน)
+  currentValue?: number;       // มูลค่าปัจจุบัน (Book Value)
+  condition?: string;          // สภาพปัจจุบัน
+  evidencePhotos?: string[];   // รูปถ่ายสภาพความเสียหาย
 }
 
 @Injectable({
@@ -138,6 +145,31 @@ export class Expert {
         { label: 'ราคา', oldValue: '850,000', newValue: '850,000', isChanged: false }
       ]
     };
+
+    // ✅ เพิ่ม Mock Case สำหรับ Dispose (สมมติ ID = '3')
+    if (id === '3') {
+      const disposeDetail: RequestDetail = {
+        id: '3',
+        reqId: 'REQ-2570/012',
+        title: 'เครื่องวัดความดันแบบปรอท (Mercury)',
+        type: 'dispose',
+        requester: 'กองบริหารการสาธารณสุข',
+        submitDate: 'เมื่อวานนี้',
+        price: 2500, // ราคาซื้อเดิม
+
+        // Data เฉพาะ Dispose
+        assetCode: '7440-001-0001/55',
+        purchaseDate: '15 มี.ค. 2555 (อายุ 12 ปี)',
+        currentValue: 0, // ตัดค่าเสื่อมหมดแล้ว
+        disposeReason: 'ชำรุดตามสภาพการใช้งาน ไม่สามารถซ่อมแซมได้คุ้มค่า (Beyond Repair) และมีนโยบายเลิกใช้สารปรอทในสถานพยาบาล',
+        condition: 'ยางเปื่อยยุ่ย ปรอทรั่วซึม ตัวถังสนิมเกาะ',
+        evidencePhotos: [
+          'https://placehold.co/400x300/fee2e2/991b1b?text=Damage+1',
+          'https://placehold.co/400x300/fee2e2/991b1b?text=Damage+2'
+        ]
+      };
+      return of(disposeDetail).pipe(delay(500));
+    }
 
     return of(detail).pipe(delay(500));
   }

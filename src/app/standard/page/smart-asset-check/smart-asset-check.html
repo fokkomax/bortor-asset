@@ -1,0 +1,70 @@
+<div class="bg-slate-50 min-h-screen font-sans text-slate-600 antialiased flex flex-col items-center pt-20 px-4">
+
+    <div class="text-center mb-10 max-w-2xl w-full">
+        <div
+            class="w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
+            <i class="pi pi-search-plus text-3xl"></i>
+        </div>
+        <h1 class="text-3xl! font-bold text-slate-800 mb-2 m-0!">ตรวจสอบบัญชีมาตรฐาน</h1>
+        <p class="text-slate-500 mb-8 m-0!">พิมพ์ชื่อครุภัณฑ์ที่คุณต้องการขอ
+            ระบบจะช่วยตรวจสอบว่ามีในบัญชีมาตรฐานแล้วหรือยัง</p>
+
+        <div class="relative group">
+            <input type="text" [ngModel]="query()" (ngModelChange)="query.set($event)" (keydown.enter)="onSearch()"
+                class="w-full pl-6 pr-14 py-4 text-lg border-2 border-slate-200 rounded-2xl shadow-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-100 outline-none transition-all"
+                placeholder="เช่น เครื่องวัดความดัน, รถพยาบาล...">
+            <button (click)="onSearch()"
+                class="absolute right-3 top-3 bg-rose-600 text-white p-2 rounded-xl hover:bg-rose-700 transition-colors shadow-md">
+                <i class="pi" [class.pi-search]="!isLoading()" [class.pi-spin]="isLoading()"
+                    [class.pi-spinner]="isLoading()" style="font-size: 1.25rem"></i>
+            </button>
+        </div>
+    </div>
+
+    @if (hasSearched() && !isLoading()) {
+    <div class="w-full max-w-4xl space-y-4 animate-fade-in-up pb-20">
+
+        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2 px-2 m-0!">ผลการตรวจสอบ ({{
+            results().length }} รายการ)</h3>
+
+        @for (item of results(); track item.id) {
+        <div class="bg-white p-5 rounded-xl border shadow-sm hover:shadow-md transition-all cursor-pointer group relative overflow-hidden"
+            [routerLink]="['/standard/detail', item.id]" [ngClass]="{
+                'border-green-200': item.matchLevel === 'high',
+                'border-slate-200': item.matchLevel !== 'high'
+             }">
+
+            @if (item.matchLevel === 'high') { <div class="absolute top-0 left-0 w-1.5 h-full bg-green-500"></div> }
+
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full border" [ngClass]="{
+                                'bg-green-100 text-green-700 border-green-200': item.matchLevel === 'high',
+                                'bg-yellow-100 text-yellow-700 border-yellow-200': item.matchLevel === 'medium',
+                                'bg-slate-100 text-slate-600 border-slate-200': item.matchLevel === 'low'
+                            }">
+                            {{ item.matchScore }}% {{ item.matchLevel === 'high' ? 'ตรงกัน' : (item.matchLevel ===
+                            'medium' ? 'คล้ายคลึง' : 'อาจเกี่ยวข้อง') }}
+                        </span>
+                        <span class="text-xs text-slate-400 font-mono">ID: {{ item.code }}</span>
+                    </div>
+                    <h4 class="text-lg! font-bold text-slate-800 group-hover:text-rose-600 transition-colors m-0!">{{
+                        item.name }}</h4>
+                    <p class="text-sm text-slate-500 mt-1 line-clamp-1 m-0!">{{ item.description }}</p>
+                </div>
+                <div class="text-right shrink-0">
+                    <p class="text-sm text-slate-400 m-0!">ราคามาตรฐาน</p>
+                    <p class="text-xl! font-bold text-slate-800 m-0!">{{ item.price | number }} <span
+                            class="text-xs font-normal">บาท</span></p>
+                    <button
+                        class="mt-2 text-xs bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 px-3 py-1.5 rounded border border-slate-200 hover:border-rose-200 transition-all">
+                        ดูรายละเอียด
+                    </button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>

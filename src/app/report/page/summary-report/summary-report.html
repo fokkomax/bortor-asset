@@ -1,0 +1,256 @@
+<div class="bg-slate-50 min-h-screen font-sans text-slate-600 antialiased">
+
+    <div class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                <div>
+                    <h1 class="text-2xl! font-bold text-slate-800 m-0!">สรุปภาพรวมการบริหารงบประมาณ</h1>
+                    <p class="text-sm text-slate-500 mt-1">Executive Summary Dashboard • ปีงบประมาณ {{ currentYear() }}
+                    </p>
+                </div>
+                <div class="flex gap-2">
+                    <button
+                        class="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 hover:text-rose-600 transition-colors shadow-sm text-sm font-bold flex items-center gap-2">
+                        <i class="pi pi-file-excel"></i> Export Excel
+                    </button>
+                    <button
+                        class="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors shadow-md shadow-rose-200 text-sm font-bold flex items-center gap-2">
+                        <i class="pi pi-print"></i> พิมพ์รายงาน
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <i class="pi pi-calendar text-sm"></i>
+                    </span>
+                    <select [ngModel]="currentYear()" (ngModelChange)="currentYear.set($event)"
+                        class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-200 outline-none bg-white">
+                        <option value="2569">ปีงบประมาณ 2569</option>
+                        <option value="2568">ปีงบประมาณ 2568</option>
+                    </select>
+                </div>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <i class="pi pi-map text-sm"></i>
+                    </span>
+                    <select
+                        class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-200 outline-none bg-white">
+                        <option>ทุกเขตสุขภาพ</option>
+                        <option>เขต 1</option>
+                        <option>เขต 2</option>
+                    </select>
+                </div>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <i class="pi pi-building text-sm"></i>
+                    </span>
+                    <input type="text" placeholder="ค้นหาหน่วยงาน..."
+                        class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-200 outline-none">
+                </div>
+                <div>
+                    <button (click)="loadData()"
+                        class="w-full py-2 bg-slate-800 text-white rounded-lg text-sm font-bold hover:bg-slate-900 transition-colors flex items-center justify-center gap-2">
+                        <i class="pi" [class.pi-refresh]="!isLoading()" [class.pi-spin]="isLoading()"
+                            [class.pi-spinner]="isLoading()"></i> ประมวลผล
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+
+        @if (stats(); as s) {
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+            <div
+                class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between h-full relative overflow-hidden group">
+                <div
+                    class="absolute right-0 top-0 w-24 h-24 bg-linear-to-br from-rose-100 to-transparent rounded-bl-full opacity-50 transition-transform group-hover:scale-110">
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">งบประมาณที่ขอทั้งหมด</p>
+                    <h3 class="text-2xl! font-bold text-slate-800 m-0!">{{ s.totalBudget | number }} <span
+                            class="text-sm font-normal text-slate-500">บาท</span></h3>
+                </div>
+                <div class="mt-4 flex items-center gap-2 text-xs">
+                    <span class="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded font-bold flex items-center">
+                        <i class="pi pi-arrow-up text-[10px] mr-1"></i> {{ s.totalBudgetDiffPercent }}%
+                    </span>
+                    <span class="text-slate-400">เทียบปีก่อน</span>
+                </div>
+            </div>
+
+            <div
+                class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between h-full relative overflow-hidden group">
+                <div
+                    class="absolute right-0 top-0 w-24 h-24 bg-linear-to-br from-emerald-100 to-transparent rounded-bl-full opacity-50 transition-transform group-hover:scale-110">
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">อนุมัติแล้ว (จัดสรร)</p>
+                    <h3 class="text-2xl! font-bold text-emerald-600 m-0!">{{ s.approvedBudget | number }} <span
+                            class="text-sm font-normal text-emerald-600/70">บาท</span></h3>
+                </div>
+                <div class="mt-4 w-full bg-slate-100 rounded-full h-1.5">
+                    <div class="bg-emerald-500 h-1.5 rounded-full" [style.width.%]="s.approvedBudgetPercent"></div>
+                </div>
+                <p class="text-[10px] text-right text-slate-400 mt-1">{{ s.approvedBudgetPercent }}% ของคำขอ</p>
+            </div>
+
+            <div
+                class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between h-full relative overflow-hidden group">
+                <div
+                    class="absolute right-0 top-0 w-24 h-24 bg-linear-to-br from-blue-100 to-transparent rounded-bl-full opacity-50 transition-transform group-hover:scale-110">
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">จำนวนคำขอทั้งหมด</p>
+                    <h3 class="text-2xl! font-bold text-slate-800 m-0!">{{ s.totalRequests | number }} <span
+                            class="text-sm font-normal text-slate-500">รายการ</span></h3>
+                </div>
+                <div class="mt-4 flex gap-2">
+                    <div class="flex-1 bg-slate-50 rounded px-2 py-1 text-center border border-slate-100">
+                        <p class="text-[10px] text-slate-400">รอตรวจ</p>
+                        <p class="font-bold text-orange-500">{{ s.pendingRequests }}</p>
+                    </div>
+                    <div class="flex-1 bg-slate-50 rounded px-2 py-1 text-center border border-slate-100">
+                        <p class="text-[10px] text-slate-400">แก้ไข</p>
+                        <p class="font-bold text-rose-500">{{ s.reviseRequests }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between h-full relative overflow-hidden group">
+                <div
+                    class="absolute right-0 top-0 w-24 h-24 bg-linear-to-br from-purple-100 to-transparent rounded-bl-full opacity-50 transition-transform group-hover:scale-110">
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">ระยะเวลาดำเนินการเฉลี่ย
+                    </p>
+                    <h3 class="text-2xl! font-bold text-purple-600 m-0!">{{ s.avgProcessTime }} <span
+                            class="text-sm font-normal text-slate-500">วัน/รายการ</span></h3>
+                </div>
+                <div class="mt-4 text-xs text-slate-500">
+                    <i class="pi pi-check-circle text-green-500 mr-1"></i> เร็วกว่าเป้าหมาย (5 วัน)
+                </div>
+            </div>
+        </div>
+        }
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 lg:col-span-2">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2 m-0!">
+                        <i class="pi pi-chart-bar text-rose-500"></i> การจัดสรรงบประมาณแยกตามเขต
+                    </h3>
+                    <button class="text-xs text-slate-400 hover:text-rose-600"><i class="pi pi-ellipsis-h"></i></button>
+                </div>
+
+                <div
+                    class="h-64 w-full bg-slate-50 rounded-lg flex items-end justify-around px-4 pb-4 border border-slate-100 relative">
+                    <div class="absolute inset-0 border-t border-slate-200 top-1/4 opacity-30"></div>
+                    <div class="absolute inset-0 border-t border-slate-200 top-2/4 opacity-30"></div>
+                    <div class="absolute inset-0 border-t border-slate-200 top-3/4 opacity-30"></div>
+
+                    @for (item of budgetByRegion(); track item.region) {
+                    <div class="w-12 bg-rose-300 rounded-t-md hover:bg-rose-500 transition-all relative group"
+                        [style.height.%]="item.percent">
+                        <div
+                            class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-slate-600 opacity-0 group-hover:opacity-100 whitespace-nowrap">
+                            {{ item.amount | number }}</div>
+                        <span
+                            class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-500 whitespace-nowrap">{{
+                            item.region }}</span>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h3 class="font-bold text-slate-800 mb-6 flex items-center gap-2 m-0!">
+                    <i class="pi pi-chart-pie text-orange-500"></i> สัดส่วนสถานะคำขอ
+                </h3>
+
+                <div class="flex flex-col items-center justify-center h-64">
+                    <div
+                        class="w-40 h-40 rounded-full border-16 border-emerald-500 border-r-slate-200 border-b-rose-400 border-l-orange-300 relative">
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-2xl! font-bold text-slate-800 m-0!">1,240</span>
+                            <span class="text-[10px] text-slate-400">Total</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-2 mt-6 text-xs">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div> <span
+                                class="text-slate-600">อนุมัติแล้ว (65%)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-orange-300"></div> <span
+                                class="text-slate-600">รอพิจารณา (15%)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-rose-400"></div> <span
+                                class="text-slate-600">แก้ไข/ตีกลับ (10%)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-slate-200"></div> <span
+                                class="text-slate-600">ไม่อนุมัติ (10%)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2 m-0!">
+                    <i class="pi pi-star text-yellow-500"></i> 5 อันดับครุภัณฑ์ที่มีคำขอสูงสุด
+                </h3>
+                <div class="space-y-4">
+                    @for (asset of topAssets(); track asset.rank) {
+                    <div class="relative">
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="text-sm font-medium text-slate-700">{{ asset.rank }}. {{ asset.name }}</span>
+                            <span class="text-xs font-bold text-rose-600">{{ asset.count }} รายการ</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2">
+                            <div class="bg-rose-500 h-2 rounded-full" [style.width.%]="asset.percent"></div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-0 overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2 m-0!">
+                        <i class="pi pi-history text-slate-500"></i> การดำเนินการล่าสุด
+                    </h3>
+                </div>
+                <div class="divide-y divide-slate-50">
+                    @for (log of activities(); track log.id) {
+                    <div class="px-6 py-4 flex gap-4 hover:bg-slate-50 transition-colors">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                            [ngClass]="log.iconBgClass + ' ' + log.iconTextClass">
+                            <i class="pi {{ log.icon }}"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-700 m-0!">{{ log.action }}</p>
+                            <p class="text-xs text-slate-500 mt-0.5 m-0!">{{ log.detail }}</p>
+                            <p class="text-[10px] text-slate-400 mt-1 m-0!">{{ log.time }}</p>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
