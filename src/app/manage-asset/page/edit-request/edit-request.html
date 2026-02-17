@@ -35,7 +35,7 @@
                         class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm shadow-sm ring-2 ring-white">
                         1
                     </div>
-                    <h3 class="font-semibold text-blue-900">ค้นหารายการที่ต้องการแก้ไข</h3>
+                    <h3 class="font-semibold! text-blue-900">ค้นหารายการที่ต้องการปรับปรุง</h3>
                 </div>
 
                 <div class="p-6">
@@ -45,7 +45,7 @@
                                 class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
                                 <i class="pi pi-file-edit text-3xl text-blue-500"></i>
                             </div>
-                            <h4 class="text-slate-700 font-bold! text-lg! mb-1">ระบุรายการที่ต้องการแก้ไข</h4>
+                            <h4 class="text-slate-700 font-bold! text-lg! mb-1">ระบุรายการที่ต้องการปรับปรุง</h4>
                             <p class="text-slate-400 text-sm">พิมพ์รหัสครุภัณฑ์ หรือชื่อรายการเพื่อค้นหา</p>
                         </div>
 
@@ -164,21 +164,6 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-2">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">ยี่ห้อ / รุ่น</label>
-                            <div
-                                class="p-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-500 text-sm flex items-center">
-                                {{ selectedAsset().brand }}
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-blue-600 mb-1">ยี่ห้อ / รุ่น (แก้ไข)</label>
-                            <input type="text" formControlName="newBrand"
-                                class="w-full p-3 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-500 outline-none transition-all shadow-sm"
-                                [placeholder]="selectedAsset().brand">
-                        </div>
-                    </div>
                 </div>
             </div>
 

@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 font-sans">
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 font-sans text-slate-600">
 
     @if (detail(); as data) {
     <header
@@ -41,8 +41,7 @@
                 <div class="bg-slate-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 flex items-center gap-2">
                     <div
                         class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border border-slate-200 text-slate-500 flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm shrink-0">
-                        1
-                    </div>
+                        1</div>
                     <h3 class="font-semibold text-slate-700 m-0! text-sm! sm:text-base!">รายละเอียดข้อมูลจำเพาะ
                         (Specification)</h3>
                 </div>
@@ -52,9 +51,8 @@
                         @for (spec of data.specs; track spec.label) {
                         <div class="border-b border-slate-50 pb-2 group hover:border-purple-100 transition-colors">
                             <span
-                                class="block text-xs font-medium text-slate-400 mb-1 group-hover:text-purple-500 transition-colors">
-                                {{ spec.label }}
-                            </span>
+                                class="block text-xs font-medium text-slate-400 mb-1 group-hover:text-purple-500 transition-colors">{{
+                                spec.label }}</span>
                             <span class="font-medium text-slate-800 text-sm wrap-break-word">{{ spec.value }}</span>
                         </div>
                         }
@@ -62,42 +60,48 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div
-                    class="bg-slate-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
-                    <div class="flex items-center gap-2">
-                        <i class="pi pi-sparkles text-purple-500"></i>
-                        <h3 class="font-semibold text-slate-700 m-0! text-sm! sm:text-base!">ผลการตรวจสอบความซ้ำซ้อน (AI
-                            Check)</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div
+                        class="bg-slate-50 px-4 sm:px-6 py-3 border-b border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-sparkles text-purple-500"></i>
+                            <h3 class="font-semibold text-slate-700 m-0! text-sm!">AI Similarity Check</h3>
+                        </div>
+                        <span
+                            class="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded font-bold border border-green-200">Pass</span>
                     </div>
-                    <span
-                        class="bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wide border border-green-200">
-                        <i class="pi pi-check-circle mr-1"></i> Pass
-                    </span>
-                </div>
-
-                <div class="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-                    <div class="relative w-20 h-20 flex items-center justify-center shrink-0">
-                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                            <path class="text-slate-100"
-                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                fill="none" stroke="currentColor" stroke-width="3" />
-                            <path class="text-green-500 drop-shadow-sm"
-                                [attr.stroke-dasharray]="data.similarityScore + ', 100'"
-                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span class="text-lg font-bold text-slate-700">{{ data.similarityScore }}%</span>
+                    <div class="p-5 flex items-center gap-5">
+                        <div class="relative w-16 h-16 flex items-center justify-center shrink-0">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                <path class="text-slate-100"
+                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="currentColor" stroke-width="3" />
+                                <path class="text-green-500" [attr.stroke-dasharray]="data.similarityScore + ', 100'"
+                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                            </svg>
+                            <span class="absolute text-sm font-bold text-slate-700">{{ data.similarityScore }}%</span>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-800 text-xs! mb-1">ไม่พบรายการซ้ำซ้อน</h4>
+                            <p class="text-[11px] text-slate-500 leading-tight">ความคล้ายคลึงต่ำกว่าเกณฑ์ 80%
+                                ยืนยันเป็นรายการใหม่</p>
                         </div>
                     </div>
+                </div>
 
-                    <div class="flex-1 text-center sm:text-left">
-                        <h4 class="font-bold text-slate-800 text-sm! mb-1">ไม่พบรายการซ้ำซ้อนที่มีนัยสำคัญ</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">
-                            ระบบ AI ตรวจสอบฐานข้อมูลรายการมาตรฐานแล้ว พบความคล้ายคลึงสูงสุดเพียง {{ data.similarityScore }}%
-                            ซึ่งต่ำกว่าเกณฑ์ที่กำหนด (80%) ถือว่าเป็น <span
-                                class="font-bold text-green-600">รายการใหม่</span>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 px-4 sm:px-6 py-3 border-b border-slate-100 flex items-center gap-2">
+                        <i class="pi pi-info-circle text-purple-500"></i>
+                        <h3 class="font-semibold text-slate-700 m-0! text-sm!">เหตุผลความจำเป็น</h3>
+                    </div>
+                    <div class="p-4">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">วัตถุประสงค์</span>
+                        <p class="text-xs font-bold text-slate-700 mb-2">{{ data.reasonType }}</p>
+                        <p
+                            class="text-xs text-slate-500 leading-relaxed line-clamp-2 hover:line-clamp-none transition-all cursor-default">
+                            {{ data.reasonDetail }}
                         </p>
                     </div>
                 </div>
@@ -107,23 +111,47 @@
                 <div class="bg-slate-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 flex items-center gap-2">
                     <div
                         class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border border-slate-200 text-slate-500 flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm shrink-0">
-                        2
+                        3
                     </div>
-                    <h3 class="font-semibold text-slate-700 m-0! text-sm! sm:text-base!">เหตุผลความจำเป็น</h3>
+                    <h3 class="font-semibold text-slate-700 m-0! text-sm! sm:text-base!">เอกสารประกอบการพิจารณา</h3>
                 </div>
-                <div class="p-4 sm:p-6 space-y-4">
-                    <div class="bg-slate-50/50 p-4 rounded-lg border border-slate-100">
-                        <span
-                            class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">วัตถุประสงค์หลัก</span>
-                        <p class="text-sm font-medium text-slate-800">{{ data.reasonType ||
-                            'เพื่อทดแทนรายการเดิมที่ชำรุด' }}</p>
+
+                <div class="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div
+                        class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-purple-300 transition-colors group">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center shadow-sm">
+                                <i class="pi pi-file-pdf text-xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="text-sm! font-bold text-slate-700 m-0! truncate">รายละเอียดคุณลักษณะ (Spec)
+                                </h4>
+                                <p class="text-[10px] text-slate-400 font-mono">spec-document-2570.pdf</p>
+                            </div>
+                        </div>
+                        <button type="button"
+                            class="px-3 py-1.5 bg-white border border-slate-300 text-slate-600 rounded-lg text-xs font-bold hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 transition-all shadow-xs flex items-center gap-1">
+                            <i class="pi pi-external-link text-[10px]"></i> เปิดดู
+                        </button>
                     </div>
-                    <div>
-                        <span
-                            class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">รายละเอียดเพิ่มเติม</span>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            {{ data.reasonDetail || 'มีความจำเป็นต้องจัดหาเครื่องมือแพทย์ชุดใหม่ เพื่อรองรับผู้ป่วยที่มีจำนวนเพิ่มมากขึ้นในแผนกฉุกเฉิน และเครื่องเดิมมีอายุการใช้งานเกิน 10 ปี ไม่สามารถซ่อมแซมได้คุ้มค่า' }}
-                        </p>
+
+                    <div
+                        class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-blue-300 transition-colors group">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+                                <i class="pi pi-dollar text-xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="text-sm! font-bold text-slate-700 m-0! truncate">ใบเสนอราคา (Quotation)</h4>
+                                <p class="text-[10px] text-slate-400 font-mono">quotation-v1.jpg</p>
+                            </div>
+                        </div>
+                        <button type="button"
+                            class="px-3 py-1.5 bg-white border border-slate-300 text-slate-600 rounded-lg text-xs font-bold hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all shadow-xs flex items-center gap-1">
+                            <i class="pi pi-search text-[10px]"></i> เปิดดู
+                        </button>
                     </div>
                 </div>
             </div>
@@ -133,7 +161,7 @@
                 <div class="bg-purple-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-purple-100 flex items-center gap-2">
                     <div
                         class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm ring-2 ring-white">
-                        3
+                        4
                     </div>
                     <h3 class="font-semibold text-purple-900 m-0! text-sm! sm:text-base!">ความเห็นและผลการพิจารณา</h3>
                 </div>
@@ -151,7 +179,6 @@
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mt-2 mb-3">ผลการพิจารณา (Decision) <span
                                 class="text-red-500">*</span></label>
-
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 
                             <label

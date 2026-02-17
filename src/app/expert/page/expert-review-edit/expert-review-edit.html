@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 font-sans">
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 font-sans text-slate-600">
 
     @if (detail(); as data) {
     <header
@@ -17,9 +17,7 @@
                             data.reqId }}</span></span>
                     <span class="hidden sm:inline text-slate-300">•</span>
                     <span
-                        class="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded text-[10px] font-bold whitespace-nowrap">
-                        ขอแก้ไขรายการ
-                    </span>
+                        class="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded text-[10px] font-bold whitespace-nowrap">ขอแก้ไขรายการ</span>
                 </div>
             </div>
         </div>
@@ -54,7 +52,7 @@
                 </div>
 
                 <div class="p-4 sm:p-6">
-                    <div class="hidden sm:grid grid-cols-2 gap-8 mb-4">
+                    <div class="hidden sm:grid grid-cols-2 gap-8 mb-4 px-2">
                         <div class="text-center pb-2 border-b-2 border-slate-200 font-bold text-slate-500 text-sm!">
                             ข้อมูลเดิม (Original)</div>
                         <div class="text-center pb-2 border-b-2 border-blue-400 font-bold text-blue-600 text-sm!">
@@ -74,7 +72,7 @@
                             <div class="opacity-70">
                                 <label class="hidden sm:block text-xs text-slate-400 mb-1">{{ comp.label }}</label>
                                 <div
-                                    class="text-sm text-slate-600 bg-slate-100 p-2 rounded border border-slate-200 min-h-9.5 flex items-center">
+                                    class="text-sm text-slate-600 bg-slate-100 p-2.5 rounded border border-slate-200 min-h-10 flex items-center">
                                     {{ comp.oldValue }}
                                 </div>
                             </div>
@@ -84,9 +82,9 @@
                                     [class.text-blue-600]="comp.isChanged" [class.text-slate-400]="!comp.isChanged">
                                     {{ comp.label }} (แก้ไข)
                                 </label>
-                                <div class="text-sm text-slate-800 bg-white p-2 rounded shadow-sm flex items-start gap-2 border min-h-9.5"
+                                <div class="text-sm text-slate-800 bg-white p-2.5 rounded shadow-sm flex items-start gap-2 border min-h-10"
                                     [class.border-blue-300]="comp.isChanged" [class.border-slate-200]="!comp.isChanged">
-                                    @if(comp.isChanged) { <i class="pi pi-pencil text-blue-500 mt-0.5 text-xs"></i> }
+                                    @if(comp.isChanged) { <i class="pi pi-pencil text-blue-500 mt-1 text-[10px]"></i> }
                                     {{ comp.newValue }}
                                 </div>
                             </div>
@@ -94,20 +92,68 @@
                         }
                     </div>
 
-                    <div
-                        class="mt-4 sm:mt-0 p-3 bg-blue-50 border border-blue-100 rounded-lg text-sm text-blue-800 flex gap-2">
-                        <i class="pi pi-info-circle mt-0.5"></i>
+                    <div class="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-xl text-sm text-blue-800 flex gap-3">
+                        <i class="pi pi-info-circle mt-0.5 text-blue-500"></i>
                         <div><span class="font-bold">เหตุผลการแก้ไข:</span> {{ data.editReason }}</div>
                     </div>
                 </div>
             </section>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 flex items-center gap-2">
+                    <div
+                        class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border border-slate-200 text-slate-500 flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm shrink-0">
+                        2
+                    </div>
+                    <h3 class="font-semibold text-slate-700 m-0! text-sm! sm:text-base!">เอกสารแนบ
+                        (หลักฐานประกอบการแก้ไข)</h3>
+                </div>
+
+                <div class="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div
+                        class="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl hover:border-purple-300 transition-colors group shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-rose-50 text-rose-600 rounded-lg flex items-center justify-center border border-rose-100">
+                                <i class="pi pi-file-pdf text-xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="text-sm! font-bold text-slate-700 m-0! truncate">รายละเอียด Spec ใหม่</h4>
+                                <p class="text-[10px] text-slate-400 font-mono">new-spec-doc.pdf</p>
+                            </div>
+                        </div>
+                        <button type="button"
+                            class="px-3 py-1.5 bg-white border border-slate-300 text-slate-600 rounded-lg text-xs font-bold hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 transition-all flex items-center gap-1 shadow-xs">
+                            <i class="pi pi-external-link text-[10px]"></i> เปิดดู
+                        </button>
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl hover:border-blue-300 transition-colors group shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center border border-blue-100">
+                                <i class="pi pi-file text-xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="text-sm! font-bold text-slate-700 m-0! truncate">บันทึกข้อความชี้แจง</h4>
+                                <p class="text-[10px] text-slate-400 font-mono">memo-clarification.jpg</p>
+                            </div>
+                        </div>
+                        <button type="button"
+                            class="px-3 py-1.5 bg-white border border-slate-300 text-slate-600 rounded-lg text-xs font-bold hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all flex items-center gap-1 shadow-xs">
+                            <i class="pi pi-search text-[10px]"></i> เปิดดู
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <div
                 class="bg-white rounded-xl shadow-md border border-purple-200 overflow-hidden ring-4 ring-purple-50/50">
                 <div class="bg-purple-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-purple-100 flex items-center gap-2">
                     <div
                         class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm ring-2 ring-white">
-                        2
+                        3
                     </div>
                     <h3 class="font-semibold text-purple-900 m-0! text-sm! sm:text-base!">ความเห็นและผลการพิจารณา</h3>
                 </div>

@@ -54,7 +54,6 @@ export class EditRequest {
       this.selectedAsset.set({
         id: '7440-001-0001/60',
         name: 'เครื่องช่วยหายใจ (Ventilator)',
-        brand: 'Bird / Vela',
         price: 850000,
         department: 'ER',
         status: 'Active'

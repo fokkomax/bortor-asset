@@ -85,6 +85,21 @@ export const appRoutes: Routes = [
                 loadComponent: () => import('@/app/report/page/summary-report/summary-report')
                     .then(m => m.SummaryReport)
             },
+            {
+                path: 'user',
+                children: [
+                    {
+                        path: 'edit',
+                        loadComponent: () => import('@/app/users/page/user-profile-edit/user-profile-edit')
+                            .then(m => m.UserProfileEdit)
+                    },
+                    {
+                        path: 'change-password',
+                        loadComponent: () => import('@/app/users/page/change-password/change-password')
+                            .then(m => m.ChangePassword)
+                    }
+                ]
+            }
         ]
     },
     // { path: 'landing', component: Landing },
